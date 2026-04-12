@@ -2,10 +2,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
+<?import javafx.net.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.audit.auditaifx.controller.RecoFormController"
-      spacing="12" style="-fx-background-color: #f4f6f9; -fx-padding: 25;">
+      spacing="12" style="-fx-background-color: #f8fafc; -fx-padding: 25;">
+    <stylesheets>
+        <URL value="@css/style.css" />
+    </stylesheets>
 
     <!-- TITRE -->
     <Label text="📌 Recommandation"

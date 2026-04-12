@@ -3,10 +3,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
+<?import javafx.net.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.audit.auditaifx.controller.MainController"
-      spacing="10" style="-fx-background-color: #f4f6f9;">
+      spacing="10" style="-fx-background-color: #f8fafc;">
+    <stylesheets>
+        <URL value="@css/style.css" />
+    </stylesheets>
 
     <!-- HEADER -->
     <HBox style="-fx-background-color: #2c3e50; -fx-padding: 15 25 15 25;"
