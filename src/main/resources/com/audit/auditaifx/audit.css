@@ -37,13 +37,21 @@
 
 .table-view .column-header {
     -fx-background-color: #1a237e;
-    -fx-padding: 10 5 10 5;
+    -fx-size: 40;
+    -fx-alignment: CENTER-LEFT;
 }
 
 .table-view .column-header .label {
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 13px;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 0 0 10;
+}
+
+.table-view .table-cell {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 0 0 10;
 }
 
 .table-view .table-row-cell {
