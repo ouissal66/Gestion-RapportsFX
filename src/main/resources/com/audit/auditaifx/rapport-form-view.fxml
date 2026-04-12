@@ -2,14 +2,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
-<?import javafx.net.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.audit.auditaifx.controller.RapportFormController"
-      spacing="12" style="-fx-background-color: #f8fafc; -fx-padding: 25;">
-    <stylesheets>
-        <URL value="@css/style.css" />
-    </stylesheets>
+      spacing="12" style="-fx-background-color: #f8fafc; -fx-padding: 25;"
+      stylesheets="@css/style.css">
 
     <!-- TITRE FORMULAIRE -->
     <Label text="📋 Rapport d'Audit"
