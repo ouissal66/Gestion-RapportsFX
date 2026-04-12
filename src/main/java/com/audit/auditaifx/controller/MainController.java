@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.geometry.Pos;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -213,6 +214,7 @@ public class MainController {
                 btnDel.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 4;");
                 btnEdit.setOnAction(e -> modifierRapport(getTableView().getItems().get(getIndex())));
                 btnDel.setOnAction(e -> supprimerRapport(getTableView().getItems().get(getIndex())));
+                box.setAlignment(Pos.CENTER);
             }
 
             @Override
@@ -235,6 +237,7 @@ public class MainController {
                 btnDel.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 4;");
                 btnEdit.setOnAction(e -> modifierRecommandation(getTableView().getItems().get(getIndex())));
                 btnDel.setOnAction(e -> supprimerRecommandation(getTableView().getItems().get(getIndex())));
+                box.setAlignment(Pos.CENTER);
             }
 
             @Override

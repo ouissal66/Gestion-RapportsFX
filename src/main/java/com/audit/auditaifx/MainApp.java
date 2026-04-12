@@ -14,7 +14,8 @@ public class MainApp extends Application {
                 MainApp.class.getResource("main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);
 
-        // Ajouter le CSS (doit être fait avant de montrer le stage pour éviter le flash)
+        // Ajouter le CSS (doit être fait avant de montrer le stage pour éviter le
+        // flash)
         String css = MainApp.class.getResource("audit.css").toExternalForm();
         scene.getStylesheets().add(css);
 
