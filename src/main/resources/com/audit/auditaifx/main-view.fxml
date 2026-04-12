@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.geometry.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.audit.auditaifx.controller.MainController"
-      spacing="10" style="-fx-background-color: #f8fafc;"
-      stylesheets="@css/style.css">
+<VBox spacing="10" style="-fx-background-color: #f8fafc;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.audit.auditaifx.controller.MainController">
 
     <!-- HEADER -->
-    <HBox style="-fx-background-color: #2c3e50; -fx-padding: 15 25 15 25;"
-          alignment="CENTER_LEFT" spacing="15">
-        <Label text="🔍 AuditAI — Gestion des Rapports"
-               style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;"/>
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #2c3e50; -fx-padding: 15 25 15 25;">
+        <Label style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;" text="🔍 AuditAI — Gestion des Rapports" />
     </HBox>
 
     <!-- SECTION RAPPORTS -->
@@ -21,70 +21,55 @@
 
         <!-- Titre + Bouton Ajouter -->
         <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label text="📋 Rapports d'Audit"
-                   style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="btnAjouterRapport" text="+ Ajouter Rapport"
-                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"
-                    onAction="#ajouterRapport"/>
+            <Label style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="📋 Rapports d'Audit" />
+            <Region prefHeight="46.0" prefWidth="576.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnAjouterRapport" onAction="#ajouterRapport" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="+ Ajouter Rapport" />
         </HBox>
 
         <!-- TableView Rapports -->
-        <TableView fx:id="rapportsTable"
-                   prefHeight="250"
-                   style="-fx-background-radius: 8;">
+        <TableView fx:id="rapportsTable" prefHeight="329.0" prefWidth="847.0" style="-fx-background-radius: 8;">
             <columns>
-                <TableColumn fx:id="colTitre"    text="Titre"          prefWidth="200"/>
-                <TableColumn fx:id="colAuditeur" text="Auditeur"       prefWidth="140"/>
-                <TableColumn fx:id="colEntite"   text="Entité Auditée" prefWidth="140"/>
-                <TableColumn fx:id="colStatut"   text="Statut"         prefWidth="100"/>
-                <TableColumn fx:id="colDate"     text="Date Création"  prefWidth="110"/>
-                <TableColumn fx:id="colNbReco"   text="Reco."          prefWidth="55"/>
-                <TableColumn fx:id="colActionsRapport" text="Actions"  prefWidth="100"/>
+                <TableColumn fx:id="colTitre" prefWidth="200" text="Titre" />
+                <TableColumn fx:id="colAuditeur" prefWidth="140" text="Auditeur" />
+                <TableColumn fx:id="colEntite" prefWidth="140" text="Entité Auditée" />
+                <TableColumn fx:id="colStatut" prefWidth="100" text="Statut" />
+                <TableColumn fx:id="colDate" prefWidth="110" text="Date Création" />
+                <TableColumn fx:id="colNbReco" prefWidth="55" text="Reco." />
+                <TableColumn fx:id="colActionsRapport" prefWidth="100" text="Actions" />
             </columns>
         </TableView>
 
     </VBox>
 
     <!-- SEPARATEUR -->
-    <Separator style="-fx-padding: 0 20 0 20;"/>
+    <Separator style="-fx-padding: 0 20 0 20;" />
 
     <!-- SECTION RECOMMANDATIONS -->
-    <VBox spacing="8" VBox.vgrow="ALWAYS"
-          style="-fx-padding: 10 20 15 20;">
+    <VBox spacing="8" style="-fx-padding: 10 20 15 20;" VBox.vgrow="ALWAYS">
 
         <!-- Titre + Bouton Ajouter -->
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label fx:id="lblRecommandations"
-                   text="📌 Recommandations — sélectionnez un rapport"
-                   style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="btnAjouterReco" text="+ Ajouter Recommandation"
-                    style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"
-                    onAction="#ajouterRecommandation"
-                    disable="true"/>
+        <HBox alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="847.0" spacing="10">
+            <Label fx:id="lblRecommandations" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="📌 Recommandations — sélectionnez un rapport" />
+            <Region prefHeight="19.0" prefWidth="322.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnAjouterReco" disable="true" onAction="#ajouterRecommandation" style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="+ Ajouter Recommandation" />
         </HBox>
 
         <!-- TableView Recommandations -->
-        <TableView fx:id="recoTable" VBox.vgrow="ALWAYS"
-                   style="-fx-background-radius: 8;">
+        <TableView fx:id="recoTable" prefHeight="295.0" prefWidth="847.0" style="-fx-background-radius: 8;" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colRecoDesc"     text="Description"  prefWidth="350"/>
-                <TableColumn fx:id="colRecoPriorite" text="Priorité"     prefWidth="100"/>
-                <TableColumn fx:id="colRecoResolue"  text="Résolue"      prefWidth="80"/>
-                <TableColumn fx:id="colActionsReco"  text="Actions"      prefWidth="100"/>
+                <TableColumn fx:id="colRecoDesc" prefWidth="350" text="Description" />
+                <TableColumn fx:id="colRecoPriorite" prefWidth="100" text="Priorité" />
+                <TableColumn fx:id="colRecoResolue" prefWidth="80" text="Résolue" />
+                <TableColumn fx:id="colActionsReco" prefWidth="100" text="Actions" />
             </columns>
         </TableView>
 
     </VBox>
 
     <!-- FOOTER -->
-    <HBox style="-fx-background-color: #ecf0f1; -fx-padding: 8 20 8 20;"
-          alignment="CENTER_LEFT" spacing="20">
-        <Label fx:id="lblTotalRapports" text="0 rapport(s)"
-               style="-fx-text-fill: #7f8c8d; -fx-font-size: 12;"/>
-        <Label fx:id="lblTotalReco" text="0 recommandation(s)"
-               style="-fx-text-fill: #7f8c8d; -fx-font-size: 12;"/>
+    <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #ecf0f1; -fx-padding: 8 20 8 20;">
+        <Label fx:id="lblTotalRapports" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12;" text="0 rapport(s)" />
+        <Label fx:id="lblTotalReco" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12;" text="0 recommandation(s)" />
     </HBox>
 
 </VBox>
