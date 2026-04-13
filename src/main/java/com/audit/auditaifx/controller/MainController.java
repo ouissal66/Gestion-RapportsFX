@@ -267,11 +267,17 @@ public class MainController {
     @FXML
     public void switchClient() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/audit/auditaifx/client-view.fxml"));
+            var resource = getClass().getResource("/com/audit/auditaifx/client-view.fxml");
+            if (resource == null) {
+                afficherErreur("Fichier client-view.fxml introuvable dans les ressources.");
+                return;
+            }
+            FXMLLoader loader = new FXMLLoader(resource);
             Parent root = loader.load();
             Stage stage = (Stage) rapportsTable.getScene().getWindow();
             stage.getScene().setRoot(root);
         } catch (Exception e) {
+            e.printStackTrace(); // Print to console for debugging
             afficherErreur("Impossible de basculer vers la vue client : " + e.getMessage());
         }
     }
