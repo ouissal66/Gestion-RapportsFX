@@ -13,7 +13,7 @@
         <HBox alignment="CENTER_LEFT" spacing="10">
             <Label text="Mes Rapports" styleClass="form-title" HBox.hgrow="ALWAYS"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="⚙️" onAction="#switchAdmin" style="-fx-background-color: #f1f5f9; -fx-background-radius: 5; -fx-cursor: hand;"/>
+            <Button text="🔐 Vue Admin" onAction="#switchAdmin" style="-fx-background-color: #f1f5f9; -fx-text-fill: #1a237e; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"/>
         </HBox>
         
         <Separator/>
