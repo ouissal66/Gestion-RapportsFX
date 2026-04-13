@@ -13,7 +13,9 @@
 
     <!-- HEADER -->
     <HBox alignment="CENTER_LEFT" spacing="15" styleClass="header">
-        <Label prefHeight="0.0" prefWidth="442.0" styleClass="header-title" text="🔍 AuditAI — Gestion des Rapports" />
+        <Label styleClass="header-title" text="🔍 AuditAI — Administration" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#switchClient" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 5; -fx-cursor: hand;" text="👤 Vue Client" />
     </HBox>
 
     <!-- SECTION RAPPORTS -->

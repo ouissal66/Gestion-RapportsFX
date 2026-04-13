@@ -228,3 +228,26 @@
 .btn-cancel:hover {
     -fx-background-color: #7f8c8d;
 }
+
+/* ─── Client View Special Styles ────────────────────── */
+.reco-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 1);
+}
+
+.reco-card:hover {
+    -fx-border-color: #3f51b5;
+    -fx-background-color: #f8f9ff;
+}
+
+.badge-statut {
+    -fx-background-radius: 12;
+    -fx-padding: 3 10;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
