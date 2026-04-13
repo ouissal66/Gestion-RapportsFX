@@ -24,8 +24,8 @@ public class ClientController {
     @FXML private TextArea txtDescription;
     
     @FXML private VBox recommendationsContainer;
-    @FXML private Label lblNoSelection;
-    @FXML private VBox detailPane;
+    @FXML private VBox lblNoSelection;
+    @FXML private ScrollPane detailPane;
 
     private RapportService service = new RapportService();
     private ObservableList<RapportAudit> allReports;
