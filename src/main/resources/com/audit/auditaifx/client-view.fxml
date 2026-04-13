@@ -1,53 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.Text?>
 
-<HBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.audit.auditaifx.controller.ClientController"
-      stylesheets="@audit.css" style="-fx-background-color: #f0f2f5;">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox prefHeight="495.0" prefWidth="877.0" style="-fx-background-color: #f0f2f5;" stylesheets="@audit.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.audit.auditaifx.controller.ClientController">
 
     <!-- Sidebar: Search & List -->
-    <VBox prefWidth="300" spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #e0e0e0; -fx-border-width: 0 1 0 0;">
+    <VBox prefHeight="495.0" prefWidth="372.0" spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #e0e0e0; -fx-border-width: 0 1 0 0;">
         <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label text="Mes Rapports" styleClass="form-title" HBox.hgrow="ALWAYS"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="🔐 Vue Admin" onAction="#switchAdmin" style="-fx-background-color: #f1f5f9; -fx-text-fill: #1a237e; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"/>
+            <Label styleClass="form-title" text="Mes Rapports" HBox.hgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#switchAdmin" prefHeight="28.0" prefWidth="100.0" style="-fx-background-color: #f1f5f9; -fx-text-fill: #1a237e; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="🔐 Vue Admin" />
         </HBox>
         
-        <Separator/>
+        <Separator />
 
-        <ListView fx:id="listRapports" VBox.vgrow="ALWAYS" styleClass="table-view"/>
+        <Button onAction="#ajouterRapport" prefWidth="Infinity" styleClass="btn-add-rapport" text="+ Nouveau Rapport" />
+
+        <ListView fx:id="listRapports" prefHeight="375.0" prefWidth="273.0" styleClass="table-view" VBox.vgrow="ALWAYS" />
     </VBox>
 
     <!-- Main Content: Details -->
     <StackPane HBox.hgrow="ALWAYS">
         <!-- Placeholder if nothing selected -->
         <VBox fx:id="lblNoSelection" alignment="CENTER" spacing="10">
-            <Label text="🔍" style="-fx-font-size: 50;"/>
-            <Label text="Sélectionnez un rapport pour voir les détails" style="-fx-text-fill: #7f8c8d;"/>
+            <Label style="-fx-font-size: 50;" text="🔍" textFill="#292c36" />
+            <Label style="-fx-text-fill: #7f8c8d;" text="Sélectionnez un rapport pour voir les détails" textFill="#171515" />
+         <effect>
+            <ColorAdjust brightness="-0.21" contrast="-0.02" hue="0.19" />
+         </effect>
         </VBox>
 
         <!-- Details Pane -->
         <ScrollPane fx:id="detailPane" fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 30;" visible="false">
             <VBox spacing="25">
-                <VBox spacing="10">
-                    <Label fx:id="lblTitre" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1a237e;"/>
-                    <HBox spacing="20">
-                        <Label fx:id="lblAuditeur" styleClass="footer-label"/>
-                        <Label fx:id="lblDate" styleClass="footer-label"/>
-                        <Label fx:id="lblStatut" styleClass="badge-en-cours" />
+                <HBox alignment="TOP_RIGHT" spacing="10">
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblTitre" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1a237e;" />
+                        <HBox spacing="20">
+                            <Label fx:id="lblAuditeur" styleClass="footer-label" />
+                            <Label fx:id="lblDate" styleClass="footer-label" />
+                            <Label fx:id="lblStatut" styleClass="badge-en-cours" />
+                        </HBox>
+                    </VBox>
+                    <HBox spacing="8">
+                        <Button onAction="#modifierRapport" styleClass="btn-edit" text="✏️ Modifier" />
+                        <Button onAction="#supprimerRapport" styleClass="btn-delete" text="🗑️ Supprimer" />
                     </HBox>
-                </VBox>
+                </HBox>
 
-                <VBox spacing="10" styleClass="table-view" style="-fx-padding: 20;">
-                    <Label text="Description du Rapport" styleClass="section-title"/>
-                    <TextArea fx:id="txtDescription" editable="false" wrapText="true" prefHeight="100" style="-fx-background-color: transparent; -fx-border-width: 0;"/>
+                <VBox spacing="10" style="-fx-padding: 20;" styleClass="table-view">
+                    <Label styleClass="section-title" text="Description du Rapport" />
+                    <TextArea fx:id="txtDescription" editable="false" prefHeight="100" style="-fx-background-color: transparent; -fx-border-width: 0;" wrapText="true" />
                 </VBox>
 
                 <VBox spacing="15">
-                    <Label text="Points de vigilance &amp; Recommandations" styleClass="section-title"/>
+                    <Label styleClass="section-title" text="Points de vigilance &amp; Recommandations" />
                     <VBox fx:id="recommendationsContainer" spacing="12">
                         <!-- Reco cards will be added here via Java -->
                     </VBox>

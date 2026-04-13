@@ -6,10 +6,14 @@ import com.audit.auditaifx.model.StatutRapport;
 import com.audit.auditaifx.service.RapportService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class ClientController {
 
@@ -30,9 +34,7 @@ public class ClientController {
 
     @FXML
     public void initialize() {
-        allReports = service.getTous();
-        
-        listRapports.setItems(allReports);
+        rafraichirListe();
         
         // Custom list cell for a better look
         listRapports.setCellFactory(lv -> new ListCell<>() {
@@ -53,6 +55,11 @@ public class ClientController {
         });
 
         showDetails(null);
+    }
+
+    private void rafraichirListe() {
+        allReports = service.getTous();
+        listRapports.setItems(allReports);
     }
 
 
@@ -91,11 +98,68 @@ public class ClientController {
     }
 
     @FXML
+    public void ajouterRapport() {
+        ouvrirFormulaireRapport(null);
+    }
+
+    @FXML
+    public void modifierRapport() {
+        RapportAudit selected = listRapports.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            ouvrirFormulaireRapport(selected);
+        }
+    }
+
+    @FXML
+    public void supprimerRapport() {
+        RapportAudit selected = listRapports.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Confirmation");
+            confirm.setHeaderText("Supprimer le rapport ?");
+            confirm.setContentText("« " + selected.getTitre() + " » sera supprimé définitivement.");
+            confirm.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    service.supprimer(selected);
+                    rafraichirListe();
+                    showDetails(null);
+                }
+            });
+        }
+    }
+
+    private void ouvrirFormulaireRapport(RapportAudit rapport) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/audit/auditaifx/rapport-form-view.fxml"));
+            Parent root = loader.load();
+
+            RapportFormController controller = loader.getController();
+            controller.setService(service);
+            controller.setRapport(rapport);
+            controller.setOnSave(() -> {
+                rafraichirListe();
+                if (rapport != null) {
+                    showDetails(rapport);
+                }
+            });
+
+            Stage stage = new Stage();
+            stage.setTitle(rapport == null ? "Ajouter un rapport" : "Modifier le rapport");
+            stage.setScene(new Scene(root, 500, 450));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            System.err.println("Erreur ouverture formulaire: " + e.getMessage());
+        }
+    }
+
+    @FXML
     public void switchAdmin() {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/audit/auditaifx/main-view.fxml"));
-            javafx.scene.Parent root = loader.load();
-            javafx.stage.Stage stage = (javafx.stage.Stage) listRapports.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/audit/auditaifx/main-view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) listRapports.getScene().getWindow();
             stage.getScene().setRoot(root);
         } catch (Exception e) {
             System.err.println("Erreur switch admin: " + e.getMessage());
