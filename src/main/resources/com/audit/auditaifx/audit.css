@@ -78,6 +78,10 @@
     -fx-background-color: #e3f2fd;
 }
 
+.table-view .table-row-cell:selected:hover {
+    -fx-background-color: #5c6bc0;
+}
+
 /* ─── Boutons principaux ───────────────────────────── */
 .btn-add-rapport {
     -fx-background-color: #27ae60;
