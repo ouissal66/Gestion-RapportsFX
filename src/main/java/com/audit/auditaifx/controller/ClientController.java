@@ -13,8 +13,6 @@ import javafx.scene.layout.VBox;
 
 public class ClientController {
 
-    @FXML private TextField txtSearch;
-    @FXML private ComboBox<String> cmbFilterStatut;
     @FXML private ListView<RapportAudit> listRapports;
     
     @FXML private Label lblTitre;
@@ -34,20 +32,7 @@ public class ClientController {
     public void initialize() {
         allReports = service.getTous();
         
-        // Setup Search and Filters
-        FilteredList<RapportAudit> filteredData = new FilteredList<>(allReports, p -> true);
-        
-        txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
-            updateFilter(filteredData, newValue, cmbFilterStatut.getValue());
-        });
-        
-        cmbFilterStatut.getItems().addAll("Tous", "BROUILLON", "EN_COURS", "FINALISE");
-        cmbFilterStatut.setValue("Tous");
-        cmbFilterStatut.valueProperty().addListener((observable, oldValue, newValue) -> {
-            updateFilter(filteredData, txtSearch.getText(), newValue);
-        });
-
-        listRapports.setItems(filteredData);
+        listRapports.setItems(allReports);
         
         // Custom list cell for a better look
         listRapports.setCellFactory(lv -> new ListCell<>() {
@@ -70,18 +55,6 @@ public class ClientController {
         showDetails(null);
     }
 
-    private void updateFilter(FilteredList<RapportAudit> list, String search, String statut) {
-        list.setPredicate(report -> {
-            boolean matchesSearch = search == null || search.isEmpty() ||
-                    report.getTitre().toLowerCase().contains(search.toLowerCase()) ||
-                    report.getAuditeur().toLowerCase().contains(search.toLowerCase());
-            
-            boolean matchesStatut = statut == null || statut.equals("Tous") ||
-                    report.getStatut().name().equals(statut);
-            
-            return matchesSearch && matchesStatut;
-        });
-    }
 
     private void showDetails(RapportAudit report) {
         if (report == null) {

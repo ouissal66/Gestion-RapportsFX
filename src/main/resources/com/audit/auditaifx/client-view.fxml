@@ -16,16 +16,6 @@
             <Button text="⚙️" onAction="#switchAdmin" style="-fx-background-color: #f1f5f9; -fx-background-radius: 5; -fx-cursor: hand;"/>
         </HBox>
         
-        <VBox spacing="5">
-            <Label text="Rechercher" styleClass="form-label"/>
-            <TextField fx:id="txtSearch" promptText="Titre ou auditeur..." />
-        </VBox>
-
-        <VBox spacing="5">
-            <Label text="Statut" styleClass="form-label"/>
-            <ComboBox fx:id="cmbFilterStatut" maxWidth="Infinity" />
-        </VBox>
-
         <Separator/>
 
         <ListView fx:id="listRapports" VBox.vgrow="ALWAYS" styleClass="table-view"/>
