@@ -57,7 +57,7 @@
                 </VBox>
 
                 <VBox spacing="15">
-                    <Label text="Points de vigilance & Recommandations" styleClass="section-title"/>
+                    <Label text="Points de vigilance &amp; Recommandations" styleClass="section-title"/>
                     <VBox fx:id="recommendationsContainer" spacing="12">
                         <!-- Reco cards will be added here via Java -->
                     </VBox>
