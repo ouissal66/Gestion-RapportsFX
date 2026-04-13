@@ -57,7 +57,7 @@
 .table-view .table-row-cell {
     -fx-background-color: white;
     -fx-border-color: transparent transparent #f0f2f5 transparent;
-    -fx-padding: 5;
+    -fx-cell-size: 40;
 }
 
 .table-view .table-row-cell:odd {
