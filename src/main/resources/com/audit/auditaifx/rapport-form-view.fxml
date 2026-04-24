@@ -9,7 +9,7 @@
       stylesheets="@audit.css">
 
     <!-- TITRE FORMULAIRE -->
-    <Label text="📋 Rapport d'Audit"
+    <Label text=" Rapport d'Audit"
            style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
     <Separator/>
 

@@ -9,21 +9,25 @@ import java.io.IOException;
 public class MainApp extends Application {
 
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                MainApp.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 900, 600);
+    public void start(Stage stage) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                    MainApp.class.getResource("main-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 900, 600);
 
-        // Ajouter le CSS (doit être fait avant de montrer le stage pour éviter le
-        // flash)
-        String css = MainApp.class.getResource("audit.css").toExternalForm();
-        scene.getStylesheets().add(css);
+            // Ajouter le CSS (doit être fait avant de montrer le stage pour éviter le flash)
+            String css = MainApp.class.getResource("audit.css").toExternalForm();
+            scene.getStylesheets().add(css);
 
-        stage.setTitle("AuditAI - Gestion des Rapports d'Audit");
-        stage.setScene(scene);
-        stage.setMinWidth(800);
-        stage.setMinHeight(550);
-        stage.show();
+            stage.setTitle("AuditAI - Gestion des Rapports d'Audit");
+            stage.setScene(scene);
+            stage.setMinWidth(800);
+            stage.setMinHeight(550);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("CRITICAL ERROR: " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {

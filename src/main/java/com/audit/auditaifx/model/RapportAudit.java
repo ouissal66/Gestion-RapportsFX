@@ -15,6 +15,7 @@ public class RapportAudit {
     private StatutRapport statut;
     private String description;
     private List<Recommandation> recommandations;
+    private List<Risque> risques;
 
     public RapportAudit() {
         this.id = UUID.randomUUID().toString();
@@ -22,6 +23,7 @@ public class RapportAudit {
         this.dateMiseAJour = LocalDate.now();
         this.statut = StatutRapport.BROUILLON;
         this.recommandations = new ArrayList<>();
+        this.risques = new ArrayList<>();
     }
 
     public RapportAudit(String titre, String auditeur, String entiteAuditee) {
@@ -57,6 +59,13 @@ public class RapportAudit {
 
     public List<Recommandation> getRecommandations() { return recommandations; }
     public void setRecommandations(List<Recommandation> r) { this.recommandations = r; }
+
+    public List<Risque> getRisques() { return risques; }
+    public void setRisques(List<Risque> r) { this.risques = r; }
+
+    public void ajouterRisque(Risque r) {
+        this.risques.add(r);
+    }
 
     public void ajouterRecommandation(Recommandation r) {
         this.recommandations.add(r);

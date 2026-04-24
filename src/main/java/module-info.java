@@ -4,6 +4,14 @@ module com.audit.auditaifx {
     requires org.kordamp.bootstrapfx.core;
     requires net.synedra.validatorfx;
     requires java.sql;
+    requires java.desktop;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
+    requires org.apache.commons.collections4;
+    requires org.apache.commons.compress;
+    requires org.apache.xmlbeans;
+    requires org.apache.logging.log4j;
+    requires com.github.librepdf.openpdf;
 
     // Ouvrir les packages à JavaFX pour la réflexion
     opens com.audit.auditaifx to javafx.fxml;

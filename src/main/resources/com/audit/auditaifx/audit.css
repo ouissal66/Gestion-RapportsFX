@@ -2,7 +2,16 @@
 .root {
     -fx-background-color: #f0f2f5;
     -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
+
+/* Hide focus ring on ALL controls */
+.button .focus-indicator { -fx-opacity: 0; }
+.button:focused { -fx-focus-color: transparent; -fx-faint-focus-color: transparent; }
+.text-field:focused .focus-indicator { -fx-opacity: 0; }
+.combo-box:focused .focus-indicator { -fx-opacity: 0; }
+* { -fx-focus-color: transparent; -fx-faint-focus-color: transparent; }
 
 /* ─── Header ───────────────────────────────────────── */
 .header {
@@ -99,6 +108,38 @@
     -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.6), 10, 0, 0, 3);
 }
 
+.btn-excel {
+    -fx-background-color: #f39c12;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(243, 156, 18, 0.4), 6, 0, 0, 2);
+}
+
+.btn-excel:hover {
+    -fx-background-color: #e67e22;
+    -fx-effect: dropshadow(gaussian, rgba(243, 156, 18, 0.6), 10, 0, 0, 3);
+}
+
+.btn-pdf {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(231, 76, 60, 0.4), 6, 0, 0, 2);
+}
+
+.btn-pdf:hover {
+    -fx-background-color: #c0392b;
+    -fx-effect: dropshadow(gaussian, rgba(231, 76, 60, 0.6), 10, 0, 0, 3);
+}
+
 .btn-add-reco {
     -fx-background-color: #2980b9;
     -fx-text-fill: white;
@@ -119,6 +160,27 @@
     -fx-effect: none;
 }
 
+.btn-ai {
+    -fx-background-color: linear-gradient(to right, #8e44ad, #3498db);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(142, 68, 173, 0.4), 6, 0, 0, 2);
+}
+
+.btn-ai:hover {
+    -fx-background-color: linear-gradient(to right, #9b59b6, #2980b9);
+    -fx-effect: dropshadow(gaussian, rgba(142, 68, 173, 0.6), 10, 0, 0, 3);
+}
+
+.btn-ai:disabled {
+    -fx-background-color: #bdc3c7;
+    -fx-effect: none;
+}
+
 /* ─── Boutons Edit / Delete ────────────────────────── */
 .btn-edit {
     -fx-background-color: #f39c12;
@@ -127,6 +189,8 @@
     -fx-padding: 4 10 4 10;
     -fx-cursor: hand;
     -fx-font-size: 12px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
 .btn-edit:hover {
@@ -140,6 +204,8 @@
     -fx-padding: 4 10 4 10;
     -fx-cursor: hand;
     -fx-font-size: 12px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
 .btn-delete:hover {
