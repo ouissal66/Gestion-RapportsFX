@@ -314,6 +314,7 @@ public class RapportService {
         r1.setDescription("Analyse de la sécurité périmétrique et des accès VPN.");
         r1.ajouterRecommandation(new Recommandation("Mettre à jour les pare-feux", "Haute"));
         r1.ajouterRecommandation(new Recommandation("Activer l'authentification 2FA", "Haute"));
+        r1.ajouterRecommandation(new Recommandation("Auditer les accès administrateurs", "Moyenne"));
         ajouter(r1);
 
         // 2. Audit Financier Q1
@@ -322,6 +323,7 @@ public class RapportService {
         r2.setDescription("Vérification des processus de facturation manuels.");
         r2.ajouterRecommandation(new Recommandation("Réviser la politique des dépenses", "Moyenne"));
         r2.ajouterRecommandation(new Recommandation("Automatiser les rapports comptables", "Faible"));
+        r2.ajouterRecommandation(new Recommandation("Mettre en place un contrôle budgétaire mensuel", "Haute"));
         ajouter(r2);
 
         // 3. Audit RH 2024
@@ -331,6 +333,7 @@ public class RapportService {
         r3.ajouterRecommandation(new Recommandation("Mettre à jour les contrats", "Haute"));
         r3.ajouterRecommandation(new Recommandation("Digitaliser les dossiers", "Faible"));
         r3.ajouterRecommandation(new Recommandation("Former au RGPD", "Moyenne"));
+        r3.ajouterRecommandation(new Recommandation("Réviser la politique de recrutement", "Moyenne"));
         ajouter(r3);
 
         // 4. Audit Qualité ISO 9001
@@ -339,6 +342,7 @@ public class RapportService {
         r4.setDescription("Évaluation de la traçabilité des pièces sur la chaîne.");
         r4.ajouterRecommandation(new Recommandation("Système de traçabilité", "Haute"));
         r4.ajouterRecommandation(new Recommandation("Revoir contrôle qualité", "Moyenne"));
+        r4.ajouterRecommandation(new Recommandation("Former les opérateurs aux normes ISO", "Haute"));
         ajouter(r4);
 
         // 5. Audit Performance IT
@@ -347,6 +351,8 @@ public class RapportService {
         r5.setDescription("Optimisation des temps de réponse des serveurs critiques.");
         r5.ajouterRecommandation(new Recommandation("Migrer vers le Cloud", "Moyenne"));
         r5.ajouterRecommandation(new Recommandation("Optimiser les requêtes SQL", "Haute"));
+        r5.ajouterRecommandation(new Recommandation("Mettre en place un système de monitoring", "Haute"));
+        r5.ajouterRecommandation(new Recommandation("Planifier les sauvegardes automatiques", "Moyenne"));
         ajouter(r5);
 
         // 6. Audit Conformité RGPD
@@ -355,6 +361,7 @@ public class RapportService {
         r6.setDescription("Vérification de la gestion des données personnelles.");
         r6.ajouterRecommandation(new Recommandation("Nommer un DPO", "Haute"));
         r6.ajouterRecommandation(new Recommandation("Mettre à jour les mentions légales", "Faible"));
+        r6.ajouterRecommandation(new Recommandation("Documenter les flux de données", "Moyenne"));
         ajouter(r6);
 
         // 7. Audit Logistique
@@ -363,6 +370,7 @@ public class RapportService {
         r7.setDescription("Analyse de la gestion des stocks et des flux.");
         r7.ajouterRecommandation(new Recommandation("Installer un WMS", "Haute"));
         r7.ajouterRecommandation(new Recommandation("Réorganiser le zonage", "Moyenne"));
+        r7.ajouterRecommandation(new Recommandation("Automatiser les inventaires", "Haute"));
         ajouter(r7);
 
         // 8. Audit Marketing Digital
@@ -371,6 +379,7 @@ public class RapportService {
         r8.setDescription("Évaluation du ROI des campagnes publicitaires.");
         r8.ajouterRecommandation(new Recommandation("Changer d'agence média", "Faible"));
         r8.ajouterRecommandation(new Recommandation("Améliorer le tracking", "Moyenne"));
+        r8.ajouterRecommandation(new Recommandation("Développer la stratégie SEO", "Haute"));
         ajouter(r8);
 
         // 9. Audit Maintenance
@@ -379,6 +388,7 @@ public class RapportService {
         r9.setDescription("Vérification du plan de maintenance préventive.");
         r9.ajouterRecommandation(new Recommandation("Remplacer les machines obsolètes", "Haute"));
         r9.ajouterRecommandation(new Recommandation("Planifier les arrêts techniques", "Moyenne"));
+        r9.ajouterRecommandation(new Recommandation("Mettre en place une GMAO", "Haute"));
         ajouter(r9);
 
         // 10. Audit Sécurité Physique
@@ -389,5 +399,90 @@ public class RapportService {
         r10.ajouterRecommandation(new Recommandation("Badgeage biométrique", "Haute"));
         r10.ajouterRecommandation(new Recommandation("Remplacer les serrures", "Moyenne"));
         ajouter(r10);
+    }
+
+    public void chargerDonneesSupplementaires() {
+        if (conn == null) return;
+        // Ajouter seulement si on a moins de 18 rapports
+        if (getTous().size() >= 18) return;
+
+        // 11. Audit Cybersécurité Avancé
+        RapportAudit r11 = new RapportAudit("Audit Cybersécurité Avancé", "Leila Bensalem", "DSI");
+        r11.setStatut(StatutRapport.EN_COURS);
+        r11.setDescription("Analyse des vulnérabilités des applications web et API exposées.");
+        r11.ajouterRecommandation(new Recommandation("Effectuer un pentest annuel", "Haute"));
+        r11.ajouterRecommandation(new Recommandation("Corriger les failles XSS détectées", "Haute"));
+        r11.ajouterRecommandation(new Recommandation("Mettre en place un WAF", "Haute"));
+        r11.ajouterRecommandation(new Recommandation("Chiffrer les communications internes", "Moyenne"));
+        ajouter(r11);
+
+        // 12. Audit Achats & Fournisseurs
+        RapportAudit r12 = new RapportAudit("Audit Achats & Fournisseurs", "Nadia Gharbi", "Achats");
+        r12.setStatut(StatutRapport.BROUILLON);
+        r12.setDescription("Évaluation des processus d'appel d'offres et de sélection fournisseurs.");
+        r12.ajouterRecommandation(new Recommandation("Centraliser les contrats fournisseurs", "Haute"));
+        r12.ajouterRecommandation(new Recommandation("Créer une grille d'évaluation fournisseurs", "Moyenne"));
+        r12.ajouterRecommandation(new Recommandation("Réduire les délais de paiement", "Faible"));
+        ajouter(r12);
+
+        // 13. Audit Comptabilité Analytique
+        RapportAudit r13 = new RapportAudit("Audit Comptabilité Analytique", "Karim Haddad", "Finance");
+        r13.setStatut(StatutRapport.FINALISE);
+        r13.setDescription("Révision du système de comptabilité analytique et des centres de coûts.");
+        r13.ajouterRecommandation(new Recommandation("Revoir l'affectation des centres de coûts", "Haute"));
+        r13.ajouterRecommandation(new Recommandation("Intégrer un outil de BI financier", "Moyenne"));
+        r13.ajouterRecommandation(new Recommandation("Former les équipes aux nouveaux processus", "Faible"));
+        r13.ajouterRecommandation(new Recommandation("Rapprocher les données ERP mensuellement", "Haute"));
+        ajouter(r13);
+
+        // 14. Audit Continuité d'Activité
+        RapportAudit r14 = new RapportAudit("Audit Continuité d'Activité (PCA)", "Thomas Bernard", "Direction");
+        r14.setStatut(StatutRapport.EN_COURS);
+        r14.setDescription("Évaluation du Plan de Continuité d'Activité et des procédures de reprise.");
+        r14.ajouterRecommandation(new Recommandation("Tester le PCA deux fois par an", "Haute"));
+        r14.ajouterRecommandation(new Recommandation("Documenter les scénarios de crise", "Haute"));
+        r14.ajouterRecommandation(new Recommandation("Désigner un responsable PCA", "Moyenne"));
+        ajouter(r14);
+
+        // 15. Audit Formation & Compétences
+        RapportAudit r15 = new RapportAudit("Audit Formation & Compétences", "Amina Berrada", "Ressources Humaines");
+        r15.setStatut(StatutRapport.BROUILLON);
+        r15.setDescription("Analyse du plan de formation et de l'adéquation compétences/postes.");
+        r15.ajouterRecommandation(new Recommandation("Identifier les écarts de compétences", "Haute"));
+        r15.ajouterRecommandation(new Recommandation("Mettre en place un plan de succession", "Moyenne"));
+        r15.ajouterRecommandation(new Recommandation("Développer les formations e-learning", "Faible"));
+        r15.ajouterRecommandation(new Recommandation("Évaluer l'efficacité des formations", "Moyenne"));
+        ajouter(r15);
+
+        // 16. Audit ERP & Systèmes Métier
+        RapportAudit r16 = new RapportAudit("Audit ERP & Systèmes Métier", "Julien Moreau", "IT");
+        r16.setStatut(StatutRapport.EN_COURS);
+        r16.setDescription("Analyse de l'utilisation et de la configuration du système ERP.");
+        r16.ajouterRecommandation(new Recommandation("Nettoyer les comptes utilisateurs inactifs", "Haute"));
+        r16.ajouterRecommandation(new Recommandation("Mettre à jour vers la dernière version ERP", "Haute"));
+        r16.ajouterRecommandation(new Recommandation("Automatiser les rapports de clôture", "Moyenne"));
+        ajouter(r16);
+
+        // 17. Audit Développement Durable
+        RapportAudit r17 = new RapportAudit("Audit Développement Durable (RSE)", "Claire Fontaine", "Direction");
+        r17.setStatut(StatutRapport.FINALISE);
+        r17.setDescription("Évaluation des pratiques RSE et de l'empreinte carbone de l'organisation.");
+        r17.ajouterRecommandation(new Recommandation("Mesurer l'empreinte carbone annuelle", "Haute"));
+        r17.ajouterRecommandation(new Recommandation("Réduire les déchets de production de 20%", "Moyenne"));
+        r17.ajouterRecommandation(new Recommandation("Déployer des panneaux solaires", "Faible"));
+        r17.ajouterRecommandation(new Recommandation("Sensibiliser les équipes aux gestes éco-responsables", "Faible"));
+        ajouter(r17);
+
+        // 18. Audit Relation Client
+        RapportAudit r18 = new RapportAudit("Audit Relation Client (CRM)", "Youssef Alami", "Commercial");
+        r18.setStatut(StatutRapport.EN_COURS);
+        r18.setDescription("Évaluation des processus de gestion de la relation client et du CRM.");
+        r18.ajouterRecommandation(new Recommandation("Centraliser les données clients dans le CRM", "Haute"));
+        r18.ajouterRecommandation(new Recommandation("Automatiser les relances commerciales", "Moyenne"));
+        r18.ajouterRecommandation(new Recommandation("Former l'équipe commerciale au CRM", "Moyenne"));
+        r18.ajouterRecommandation(new Recommandation("Améliorer les tableaux de bord de vente", "Haute"));
+        ajouter(r18);
+
+        System.out.println("✅ 8 rapports supplémentaires chargés avec succès.");
     }
 }

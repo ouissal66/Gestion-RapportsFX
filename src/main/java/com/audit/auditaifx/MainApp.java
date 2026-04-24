@@ -1,10 +1,10 @@
 package com.audit.auditaifx;
 
+import com.audit.auditaifx.service.RapportService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.IOException;
 
 public class MainApp extends Application {
 
@@ -24,6 +24,15 @@ public class MainApp extends Application {
             stage.setMinWidth(800);
             stage.setMinHeight(550);
             stage.show();
+
+            // Charger les données supplémentaires en arrière-plan
+            Thread seedThread = new Thread(() -> {
+                RapportService seedService = new RapportService();
+                seedService.chargerDonneesSupplementaires();
+            });
+            seedThread.setDaemon(true);
+            seedThread.start();
+
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("CRITICAL ERROR: " + e.getMessage());
