@@ -320,6 +320,7 @@ public class RapportService {
         // 1. Audit Sécurité SI
         RapportAudit r1 = new RapportAudit("Audit Sécurité SI", "Ali Ben Salem", "DSI");
         r1.setStatut(StatutRapport.EN_COURS);
+        r1.setDateCreation(LocalDate.of(2026, 1, 15));
         r1.setDescription("Analyse de la sécurité périmétrique et des accès VPN.");
         r1.ajouterRecommandation(new Recommandation("Mettre à jour les pare-feux", "Haute"));
         r1.ajouterRecommandation(new Recommandation("Activer l'authentification 2FA", "Haute"));
@@ -329,6 +330,7 @@ public class RapportService {
         // 2. Audit Financier Q1
         RapportAudit r2 = new RapportAudit("Audit Financier Q1", "Sara Mansour", "Finance");
         r2.setStatut(StatutRapport.FINALISE);
+        r2.setDateCreation(LocalDate.of(2026, 1, 25));
         r2.setDescription("Vérification des processus de facturation manuels.");
         r2.ajouterRecommandation(new Recommandation("Réviser la politique des dépenses", "Moyenne"));
         r2.ajouterRecommandation(new Recommandation("Automatiser les rapports comptables", "Faible"));
@@ -338,6 +340,7 @@ public class RapportService {
         // 3. Audit RH 2024
         RapportAudit r3 = new RapportAudit("Audit RH 2024", "Mohamed Triki", "Ressources Humaines");
         r3.setStatut(StatutRapport.BROUILLON);
+        r3.setDateCreation(LocalDate.of(2026, 2, 5));
         r3.setDescription("Audit des dossiers du personnel et stockage physique.");
         r3.ajouterRecommandation(new Recommandation("Mettre à jour les contrats", "Haute"));
         r3.ajouterRecommandation(new Recommandation("Digitaliser les dossiers", "Faible"));
@@ -348,6 +351,7 @@ public class RapportService {
         // 4. Audit Qualité ISO 9001
         RapportAudit r4 = new RapportAudit("Audit Qualité ISO 9001", "Fatma Riahi", "Production");
         r4.setStatut(StatutRapport.EN_COURS);
+        r4.setDateCreation(LocalDate.of(2026, 2, 12));
         r4.setDescription("Évaluation de la traçabilité des pièces sur la chaîne.");
         r4.ajouterRecommandation(new Recommandation("Système de traçabilité", "Haute"));
         r4.ajouterRecommandation(new Recommandation("Revoir contrôle qualité", "Moyenne"));
@@ -357,6 +361,7 @@ public class RapportService {
         // 5. Audit Performance IT
         RapportAudit r5 = new RapportAudit("Audit Performance IT", "Jean Dupont", "IT");
         r5.setStatut(StatutRapport.FINALISE);
+        r5.setDateCreation(LocalDate.of(2026, 2, 28));
         r5.setDescription("Optimisation des temps de réponse des serveurs critiques.");
         r5.ajouterRecommandation(new Recommandation("Migrer vers le Cloud", "Moyenne"));
         r5.ajouterRecommandation(new Recommandation("Optimiser les requêtes SQL", "Haute"));
@@ -367,6 +372,7 @@ public class RapportService {
         // 6. Audit Conformité RGPD
         RapportAudit r6 = new RapportAudit("Audit Conformité RGPD", "Sophie Laurent", "Juridique");
         r6.setStatut(StatutRapport.EN_COURS);
+        r6.setDateCreation(LocalDate.of(2026, 3, 2));
         r6.setDescription("Vérification de la gestion des données personnelles.");
         r6.ajouterRecommandation(new Recommandation("Nommer un DPO", "Haute"));
         r6.ajouterRecommandation(new Recommandation("Mettre à jour les mentions légales", "Faible"));
@@ -376,6 +382,7 @@ public class RapportService {
         // 7. Audit Logistique
         RapportAudit r7 = new RapportAudit("Audit Logistique", "Marc Durand", "Entrepôt");
         r7.setStatut(StatutRapport.BROUILLON);
+        r7.setDateCreation(LocalDate.of(2026, 3, 15));
         r7.setDescription("Analyse de la gestion des stocks et des flux.");
         r7.ajouterRecommandation(new Recommandation("Installer un WMS", "Haute"));
         r7.ajouterRecommandation(new Recommandation("Réorganiser le zonage", "Moyenne"));
@@ -385,6 +392,7 @@ public class RapportService {
         // 8. Audit Marketing Digital
         RapportAudit r8 = new RapportAudit("Audit Marketing Digital", "Kevin Martin", "Marketing");
         r8.setStatut(StatutRapport.FINALISE);
+        r8.setDateCreation(LocalDate.of(2026, 3, 22));
         r8.setDescription("Évaluation du ROI des campagnes publicitaires.");
         r8.ajouterRecommandation(new Recommandation("Changer d'agence média", "Faible"));
         r8.ajouterRecommandation(new Recommandation("Améliorer le tracking", "Moyenne"));
@@ -394,6 +402,7 @@ public class RapportService {
         // 9. Audit Maintenance
         RapportAudit r9 = new RapportAudit("Audit Maintenance", "Paul Lefebvre", "Technique");
         r9.setStatut(StatutRapport.EN_COURS);
+        r9.setDateCreation(LocalDate.of(2026, 4, 1));
         r9.setDescription("Vérification du plan de maintenance préventive.");
         r9.ajouterRecommandation(new Recommandation("Remplacer les machines obsolètes", "Haute"));
         r9.ajouterRecommandation(new Recommandation("Planifier les arrêts techniques", "Moyenne"));
@@ -403,6 +412,7 @@ public class RapportService {
         // 10. Audit Sécurité Physique
         RapportAudit r10 = new RapportAudit("Audit Sécurité Physique", "Eric Petit", "Sécurité");
         r10.setStatut(StatutRapport.FINALISE);
+        r10.setDateCreation(LocalDate.of(2026, 4, 10));
         r10.setDescription("Contrôle des accès aux bâtiments et vidéosurveillance.");
         r10.ajouterRecommandation(new Recommandation("Ajouter des caméras", "Moyenne"));
         r10.ajouterRecommandation(new Recommandation("Badgeage biométrique", "Haute"));
@@ -417,6 +427,7 @@ public class RapportService {
         // 11. Audit Cybersécurité Avancé
         RapportAudit r11 = new RapportAudit("Audit Cybersécurité Avancé", "Leila Bensalem", "DSI");
         r11.setStatut(StatutRapport.EN_COURS);
+        r11.setDateCreation(LocalDate.of(2026, 1, 5));
         r11.setDescription("Analyse des vulnérabilités des applications web et API exposées.");
         r11.ajouterRecommandation(new Recommandation("Effectuer un pentest annuel", "Haute"));
         r11.ajouterRecommandation(new Recommandation("Corriger les failles XSS détectées", "Haute"));
@@ -427,6 +438,7 @@ public class RapportService {
         // 12. Audit Achats & Fournisseurs
         RapportAudit r12 = new RapportAudit("Audit Achats & Fournisseurs", "Nadia Gharbi", "Achats");
         r12.setStatut(StatutRapport.BROUILLON);
+        r12.setDateCreation(LocalDate.of(2026, 1, 20));
         r12.setDescription("Évaluation des processus d'appel d'offres et de sélection fournisseurs.");
         r12.ajouterRecommandation(new Recommandation("Centraliser les contrats fournisseurs", "Haute"));
         r12.ajouterRecommandation(new Recommandation("Créer une grille d'évaluation fournisseurs", "Moyenne"));
@@ -436,6 +448,7 @@ public class RapportService {
         // 13. Audit Comptabilité Analytique
         RapportAudit r13 = new RapportAudit("Audit Comptabilité Analytique", "Karim Haddad", "Finance");
         r13.setStatut(StatutRapport.FINALISE);
+        r13.setDateCreation(LocalDate.of(2026, 2, 10));
         r13.setDescription("Révision du système de comptabilité analytique et des centres de coûts.");
         r13.ajouterRecommandation(new Recommandation("Revoir l'affectation des centres de coûts", "Haute"));
         r13.ajouterRecommandation(new Recommandation("Intégrer un outil de BI financier", "Moyenne"));
@@ -446,6 +459,7 @@ public class RapportService {
         // 14. Audit Continuité d'Activité
         RapportAudit r14 = new RapportAudit("Audit Continuité d'Activité (PCA)", "Thomas Bernard", "Direction");
         r14.setStatut(StatutRapport.EN_COURS);
+        r14.setDateCreation(LocalDate.of(2026, 2, 20));
         r14.setDescription("Évaluation du Plan de Continuité d'Activité et des procédures de reprise.");
         r14.ajouterRecommandation(new Recommandation("Tester le PCA deux fois par an", "Haute"));
         r14.ajouterRecommandation(new Recommandation("Documenter les scénarios de crise", "Haute"));
@@ -455,6 +469,7 @@ public class RapportService {
         // 15. Audit Formation & Compétences
         RapportAudit r15 = new RapportAudit("Audit Formation & Compétences", "Amina Berrada", "Ressources Humaines");
         r15.setStatut(StatutRapport.BROUILLON);
+        r15.setDateCreation(LocalDate.of(2026, 3, 1));
         r15.setDescription("Analyse du plan de formation et de l'adéquation compétences/postes.");
         r15.ajouterRecommandation(new Recommandation("Identifier les écarts de compétences", "Haute"));
         r15.ajouterRecommandation(new Recommandation("Mettre en place un plan de succession", "Moyenne"));
@@ -465,6 +480,7 @@ public class RapportService {
         // 16. Audit ERP & Systèmes Métier
         RapportAudit r16 = new RapportAudit("Audit ERP & Systèmes Métier", "Julien Moreau", "IT");
         r16.setStatut(StatutRapport.EN_COURS);
+        r16.setDateCreation(LocalDate.of(2026, 3, 18));
         r16.setDescription("Analyse de l'utilisation et de la configuration du système ERP.");
         r16.ajouterRecommandation(new Recommandation("Nettoyer les comptes utilisateurs inactifs", "Haute"));
         r16.ajouterRecommandation(new Recommandation("Mettre à jour vers la dernière version ERP", "Haute"));
@@ -474,6 +490,7 @@ public class RapportService {
         // 17. Audit Développement Durable
         RapportAudit r17 = new RapportAudit("Audit Développement Durable (RSE)", "Claire Fontaine", "Direction");
         r17.setStatut(StatutRapport.FINALISE);
+        r17.setDateCreation(LocalDate.of(2026, 4, 3));
         r17.setDescription("Évaluation des pratiques RSE et de l'empreinte carbone de l'organisation.");
         r17.ajouterRecommandation(new Recommandation("Mesurer l'empreinte carbone annuelle", "Haute"));
         r17.ajouterRecommandation(new Recommandation("Réduire les déchets de production de 20%", "Moyenne"));
@@ -484,6 +501,7 @@ public class RapportService {
         // 18. Audit Relation Client
         RapportAudit r18 = new RapportAudit("Audit Relation Client (CRM)", "Youssef Alami", "Commercial");
         r18.setStatut(StatutRapport.EN_COURS);
+        r18.setDateCreation(LocalDate.of(2026, 4, 12));
         r18.setDescription("Évaluation des processus de gestion de la relation client et du CRM.");
         r18.ajouterRecommandation(new Recommandation("Centraliser les données clients dans le CRM", "Haute"));
         r18.ajouterRecommandation(new Recommandation("Automatiser les relances commerciales", "Moyenne"));
