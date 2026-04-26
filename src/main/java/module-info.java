@@ -5,6 +5,7 @@ module com.audit.auditaifx {
     requires net.synedra.validatorfx;
     requires java.sql;
     requires java.desktop;
+    requires java.net.http;
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
     requires org.apache.commons.collections4;

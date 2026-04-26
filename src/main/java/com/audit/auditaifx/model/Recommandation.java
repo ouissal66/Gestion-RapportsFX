@@ -6,7 +6,8 @@ public class Recommandation {
     private String priorite; // "Haute", "Moyenne", "Faible"
     private boolean resolue;
 
-    public Recommandation() {}
+    public Recommandation() {
+    }
 
     public Recommandation(String description, String priorite) {
         this.description = description;
@@ -14,17 +15,37 @@ public class Recommandation {
         this.resolue = false;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getPriorite() { return priorite; }
-    public void setPriorite(String priorite) { this.priorite = priorite; }
+    public String getDescription() {
+        return description;
+    }
 
-    public boolean isResolue() { return resolue; }
-    public void setResolue(boolean resolue) { this.resolue = resolue; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPriorite() {
+        return priorite;
+    }
+
+    public void setPriorite(String priorite) {
+        this.priorite = priorite;
+    }
+
+    public boolean isResolue() {
+        return resolue;
+    }
+
+    public void setResolue(boolean resolue) {
+        this.resolue = resolue;
+    }
 
     @Override
     public String toString() {

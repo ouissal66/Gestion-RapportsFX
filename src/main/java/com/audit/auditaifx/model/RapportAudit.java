@@ -33,35 +33,85 @@ public class RapportAudit {
         this.entiteAuditee = entiteAuditee;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getTitre() { return titre; }
-    public void setTitre(String titre) { this.titre = titre; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getAuditeur() { return auditeur; }
-    public void setAuditeur(String auditeur) { this.auditeur = auditeur; }
+    public String getTitre() {
+        return titre;
+    }
 
-    public String getEntiteAuditee() { return entiteAuditee; }
-    public void setEntiteAuditee(String e) { this.entiteAuditee = e; }
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
 
-    public LocalDate getDateCreation() { return dateCreation; }
-    public void setDateCreation(LocalDate d) { this.dateCreation = d; }
+    public String getAuditeur() {
+        return auditeur;
+    }
 
-    public LocalDate getDateMiseAJour() { return dateMiseAJour; }
-    public void setDateMiseAJour(LocalDate d) { this.dateMiseAJour = d; }
+    public void setAuditeur(String auditeur) {
+        this.auditeur = auditeur;
+    }
 
-    public StatutRapport getStatut() { return statut; }
-    public void setStatut(StatutRapport statut) { this.statut = statut; }
+    public String getEntiteAuditee() {
+        return entiteAuditee;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setEntiteAuditee(String e) {
+        this.entiteAuditee = e;
+    }
 
-    public List<Recommandation> getRecommandations() { return recommandations; }
-    public void setRecommandations(List<Recommandation> r) { this.recommandations = r; }
+    public LocalDate getDateCreation() {
+        return dateCreation;
+    }
 
-    public List<Risque> getRisques() { return risques; }
-    public void setRisques(List<Risque> r) { this.risques = r; }
+    public void setDateCreation(LocalDate d) {
+        this.dateCreation = d;
+    }
+
+    public LocalDate getDateMiseAJour() {
+        return dateMiseAJour;
+    }
+
+    public void setDateMiseAJour(LocalDate d) {
+        this.dateMiseAJour = d;
+    }
+
+    public StatutRapport getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutRapport statut) {
+        this.statut = statut;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Recommandation> getRecommandations() {
+        return recommandations;
+    }
+
+    public void setRecommandations(List<Recommandation> r) {
+        this.recommandations = r;
+    }
+
+    public List<Risque> getRisques() {
+        return risques;
+    }
+
+    public void setRisques(List<Risque> r) {
+        this.risques = r;
+    }
 
     public void ajouterRisque(Risque r) {
         this.risques.add(r);

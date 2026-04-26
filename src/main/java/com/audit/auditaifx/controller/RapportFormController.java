@@ -10,14 +10,22 @@ import javafx.stage.Stage;
 
 public class RapportFormController {
 
-    @FXML private TextField txtTitre;
-    @FXML private TextField txtAuditeur;
-    @FXML private TextField txtEntite;
-    @FXML private TextArea  txtDescription;
-    @FXML private ComboBox<StatutRapport> cmbStatut;
-    @FXML private Label lblErreurTitre;
-    @FXML private Label lblErreurAuditeur;
-    @FXML private Label lblErreurEntite;
+    @FXML
+    private TextField txtTitre;
+    @FXML
+    private TextField txtAuditeur;
+    @FXML
+    private TextField txtEntite;
+    @FXML
+    private TextArea txtDescription;
+    @FXML
+    private ComboBox<StatutRapport> cmbStatut;
+    @FXML
+    private Label lblErreurTitre;
+    @FXML
+    private Label lblErreurAuditeur;
+    @FXML
+    private Label lblErreurEntite;
 
     private RapportService service;
     private RapportAudit rapport;
@@ -56,15 +64,15 @@ public class RapportFormController {
 
     @FXML
     public void sauvegarder() {
-        if (!valider()) return;
+        if (!valider())
+            return;
 
         if (rapport == null) {
             // Création
             RapportAudit nouveau = new RapportAudit(
                     txtTitre.getText().trim(),
                     txtAuditeur.getText().trim(),
-                    txtEntite.getText().trim()
-            );
+                    txtEntite.getText().trim());
             String desc = txtDescription.getText();
             nouveau.setDescription(desc != null ? desc.trim() : "");
             nouveau.setStatut(cmbStatut.getValue());
@@ -80,7 +88,8 @@ public class RapportFormController {
             service.modifier(rapport);
         }
 
-        if (onSave != null) onSave.run();
+        if (onSave != null)
+            onSave.run();
         fermer();
     }
 

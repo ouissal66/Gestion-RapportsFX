@@ -43,50 +43,146 @@ import java.awt.Color;
 public class MainController {
 
     // --- Sidebar & Views ---
-    @FXML private ScrollPane dashboardView;
-    @FXML private VBox allReportsView;
-    @FXML private VBox detailView;
+    @FXML
+    private StackPane paneNotifIcon;
+    @FXML
+    private Label lblNotifCount;
+    private javafx.scene.control.ContextMenu notifMenu = new javafx.scene.control.ContextMenu();
+    @FXML
+    private ScrollPane dashboardView;
+    @FXML
+    private VBox allReportsView;
+    @FXML
+    private ScrollPane detailView;
 
     // --- Dashboard Analytics ---
-    @FXML private PieChart chartStatut;
-    @FXML private BarChart<String, Number> chartPriorite;
-    @FXML private VBox vboxRecentReports;
+    @FXML
+    private PieChart chartStatut;
+    @FXML
+    private BarChart<String, Number> chartPriorite;
+    @FXML
+    private LineChart<String, Number> chartTendance;
+    @FXML
+    private VBox vboxRecentReports;
+
+    // --- AI Recommendation Card ---
+    @FXML
+    private Label lblAIRapportTitre;
+    @FXML
+    private Label lblAIRaison;
+    @FXML
+    private Label lblAIPriorityBadge;
+    @FXML
+    private Label lblScoreAI;
+    @FXML
+    private Label lblAIDetail;
+    @FXML
+    private ProgressBar progressPrioriteAI;
+    @FXML
+    private Button btnVoirRapportAI;
+    @FXML
+    private Button btnRefreshAI;
+
+    private RapportAudit rapportPrioritaireIA = null;
 
     // --- Rapports Table (Full List Page) ---
-    @FXML private TableView<RapportAudit> rapportsTable;
-    @FXML private TableColumn<RapportAudit, String> colTitre;
-    @FXML private TableColumn<RapportAudit, String> colAuditeur;
-    @FXML private TableColumn<RapportAudit, String> colEntite;
-    @FXML private TableColumn<RapportAudit, String> colStatut;
-    @FXML private TableColumn<RapportAudit, String> colDate;
-    @FXML private TableColumn<RapportAudit, Integer> colNbReco;
-    @FXML private TableColumn<RapportAudit, Void> colActionsRapport;
-    @FXML private TextField txtSearchReports;
+    @FXML
+    private TableView<RapportAudit> rapportsTable;
+    @FXML
+    private TableColumn<RapportAudit, String> colTitre;
+    @FXML
+    private TableColumn<RapportAudit, String> colAuditeur;
+    @FXML
+    private TableColumn<RapportAudit, String> colEntite;
+    @FXML
+    private TableColumn<RapportAudit, String> colStatut;
+    @FXML
+    private TableColumn<RapportAudit, String> colDate;
+    @FXML
+    private TableColumn<RapportAudit, Integer> colNbReco;
+    @FXML
+    private TableColumn<RapportAudit, Void> colActionsRapport;
+    @FXML
+    private TextField txtSearchReports;
+    @FXML
+    private ComboBox<String> comboFilterStatut;
+    @FXML
+    private ComboBox<String> comboFilterNom;
+
+    // --- Pagination ---
+    @FXML private Button btnPrevPage;
+    @FXML private Button btnNextPage;
+    @FXML private Label lblPageInfo;
+    @FXML private Label lblTotalFiltered;
+    private static final int PAGE_SIZE = 8;
+    private int currentPage = 0;
+    private List<RapportAudit> filteredList = new java.util.ArrayList<>();
+
+    // --- Score bar ---
+    @FXML private ProgressBar progressResolution;
+    @FXML private Label lblScoreResolution;
+    @FXML private Label lblRecoStats;
 
     // --- Dashboard Stats ---
-    @FXML private Label lblDashTotalRapports;
-    @FXML private Label lblDashTotalReco;
-    @FXML private Label lblDashTaux;
-    @FXML private ProgressIndicator progressIndicator;
+    @FXML
+    private Label lblDashTotalRapports;
+    @FXML
+    private Label lblDashTotalReco;
+    @FXML
+    private Label lblDashTaux;
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     // --- Selected Report Info ---
-    @FXML private Label lblSelectedTitre;
-    @FXML private Label lblSelectedSub;
+    @FXML
+    private Label lblSelectedTitre;
+    @FXML
+    private Label lblSelectedSub;
+    @FXML
+    private Label txtDescriptionRapport;
+    @FXML
+    private Label lblStatutBadge;
+    @FXML
+    private Label lblDateCreation;
+    @FXML
+    private Label lblInfoEntite;
+    @FXML
+    private Label lblInfoAuditeur;
 
     // --- Recommandations ---
-    @FXML private TableView<Recommandation> recoTable;
-    @FXML private TableColumn<Recommandation, String> colRecoDesc;
-    @FXML private TableColumn<Recommandation, String> colRecoPriorite;
-    @FXML private TableColumn<Recommandation, Boolean> colRecoResolue;
-    @FXML private TableColumn<Recommandation, Void> colActionsReco;
+    @FXML
+    private TableView<Recommandation> recoTable;
+    @FXML
+    private TableColumn<Recommandation, String> colRecoDesc;
+    @FXML
+    private TableColumn<Recommandation, String> colRecoPriorite;
+    @FXML
+    private TableColumn<Recommandation, Boolean> colRecoResolue;
+    @FXML
+    private TableColumn<Recommandation, Void> colActionsReco;
+
+    // --- Risques Table ---
+    @FXML private TableView<Risque> risqueTable;
+    @FXML private TableColumn<Risque, Void> colRisqueAlerte;
+    @FXML private TableColumn<Risque, String> colRisqueNiveau;
+    @FXML private TableColumn<Risque, String> colRisqueDesc;
+    @FXML private TableColumn<Risque, String> colRisqueImpact;
+    @FXML private TableColumn<Risque, Void> colActionsRisque;
+    @FXML private Label lblRisqueCount;
 
     // --- Labels + Boutons ---
-    @FXML private Label lblRecommandations;
-    @FXML private Label lblTotalRapports;
-    @FXML private Label lblTotalReco;
-    @FXML private Button btnAjouterReco;
-    @FXML private Button btnAnalyserIA;
-    @FXML private Button btnDetecterRisques;
+    @FXML
+    private Label lblRecommandations;
+    @FXML
+    private Label lblTotalRapports;
+    @FXML
+    private Label lblTotalReco;
+    @FXML
+    private Button btnAjouterReco;
+    @FXML
+    private Button btnAnalyserIA;
+    @FXML
+    private Button btnDetecterRisques;
 
     // --- Services ---
     private RapportService service = new RapportService();
@@ -96,16 +192,15 @@ public class MainController {
     @FXML
     public void initialize() {
         System.out.println("DEBUG Admin: Démarrage de initialize Multi-Page...");
-        
+
         // Config table rapports (La "page" liste)
         colTitre.setCellValueFactory(new PropertyValueFactory<>("titre"));
         colAuditeur.setCellValueFactory(new PropertyValueFactory<>("auditeur"));
         colEntite.setCellValueFactory(new PropertyValueFactory<>("entiteAuditee"));
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("dateCreation"));
-        colNbReco.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleIntegerProperty(
-                        cellData.getValue().getRecommandations().size()).asObject());
+        colNbReco.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(
+                cellData.getValue().getRecommandations().size()).asObject());
 
         // Boutons actions dans la table
         ajouterBoutonsRapportsTable();
@@ -123,28 +218,102 @@ public class MainController {
         // Boutons actions recommandations
         ajouterBoutonsReco();
 
+        // Colonnes risques
+        colRisqueNiveau.setCellValueFactory(new PropertyValueFactory<>("niveau"));
+        colRisqueDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colRisqueImpact.setCellValueFactory(new PropertyValueFactory<>("impact"));
+        ajouterIconeAlerteRisque();
+        ajouterBoutonRisque();
+
+        // Filtre statut
+        comboFilterStatut.getItems().addAll("Tous", "BROUILLON", "EN_COURS", "FINALISE");
+        comboFilterStatut.setValue("Tous");
+        comboFilterStatut.setOnAction(e -> appliquerFiltreEtPagination());
+
+        // Filtre nom (Auditeur)
+        comboFilterNom.getItems().add("Tous");
+        comboFilterNom.setValue("Tous");
+        comboFilterNom.setOnAction(e -> appliquerFiltreEtPagination());
+
         // Recherche dynamique
-        txtSearchReports.textProperty().addListener((obs, oldText, newText) -> {
-            filtrerRapports(newText);
-        });
+        txtSearchReports.textProperty().addListener((obs, oldText, newText) -> appliquerFiltreEtPagination());
 
         // Charger données
         rafraichirListe();
         showDashboard();
     }
 
-    private void filtrerRapports(String query) {
-        if (query == null || query.isEmpty()) {
-            rapportsTable.setItems(service.getTous());
+    private void updateFiltreNomList() {
+        String current = comboFilterNom.getValue();
+        comboFilterNom.getItems().clear();
+        comboFilterNom.getItems().add("Tous");
+        
+        // Extract unique auditors
+        java.util.Set<String> auditeurs = service.getTous().stream()
+            .map(RapportAudit::getAuditeur)
+            .filter(a -> a != null && !a.isBlank())
+            .collect(Collectors.toSet());
+            
+        comboFilterNom.getItems().addAll(auditeurs);
+        if (comboFilterNom.getItems().contains(current)) {
+            comboFilterNom.setValue(current);
         } else {
-            String lower = query.toLowerCase();
-            ObservableList<RapportAudit> filtres = service.getTous().filtered(r -> 
-                r.getTitre().toLowerCase().contains(lower) || 
-                r.getEntiteAuditee().toLowerCase().contains(lower) ||
-                r.getAuditeur().toLowerCase().contains(lower)
-            );
-            rapportsTable.setItems(filtres);
+            comboFilterNom.setValue("Tous");
         }
+    }
+
+    private void appliquerFiltreEtPagination() {
+        String query = txtSearchReports.getText() != null ? txtSearchReports.getText().toLowerCase() : "";
+        String statut = comboFilterStatut.getValue();
+        String nom = comboFilterNom.getValue();
+
+        filteredList = service.getTous().stream()
+            .filter(r -> {
+                boolean matchSearch = query.isEmpty()
+                    || r.getTitre().toLowerCase().contains(query)
+                    || r.getEntiteAuditee().toLowerCase().contains(query)
+                    || r.getAuditeur().toLowerCase().contains(query);
+                boolean matchStatut = statut == null || statut.equals("Tous")
+                    || r.getStatut().name().equals(statut);
+                boolean matchNom = nom == null || nom.equals("Tous")
+                    || (r.getAuditeur() != null && r.getAuditeur().equals(nom));
+                return matchSearch && matchStatut && matchNom;
+            })
+            .collect(Collectors.toList());
+
+        currentPage = 0;
+        afficherPageCourante();
+    }
+
+    private void afficherPageCourante() {
+        int total = filteredList.size();
+        int totalPages = Math.max(1, (int) Math.ceil((double) total / PAGE_SIZE));
+        int from = currentPage * PAGE_SIZE;
+        int to = Math.min(from + PAGE_SIZE, total);
+
+        ObservableList<RapportAudit> page = FXCollections.observableArrayList(
+            filteredList.subList(from, to));
+        rapportsTable.setItems(page);
+
+        lblPageInfo.setText("Page " + (currentPage + 1) + " / " + totalPages);
+        lblTotalFiltered.setText(total + " rapport(s) trouvé(s)");
+        btnPrevPage.setDisable(currentPage == 0);
+        btnNextPage.setDisable(currentPage >= totalPages - 1);
+    }
+
+    @FXML
+    public void pagePrev() {
+        if (currentPage > 0) { currentPage--; afficherPageCourante(); }
+    }
+
+    @FXML
+    public void pageNext() {
+        int totalPages = (int) Math.ceil((double) filteredList.size() / PAGE_SIZE);
+        if (currentPage < totalPages - 1) { currentPage++; afficherPageCourante(); }
+    }
+
+    private void filtrerRapports(String query) {
+        appliquerFiltreEtPagination();
     }
 
     private void ajouterBoutonsRapportsTable() {
@@ -155,14 +324,17 @@ public class MainController {
             private final HBox container = new HBox(5, btnVoir, btnEdit, btnDel);
 
             {
-                btnVoir.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
-                btnEdit.setStyle("-fx-background-color: #f1c40f; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
-                btnDel.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
-                
+                btnVoir.setStyle(
+                        "-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
+                btnEdit.setStyle(
+                        "-fx-background-color: #f1c40f; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
+                btnDel.setStyle(
+                        "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
+
                 btnVoir.setFocusTraversable(false);
                 btnEdit.setFocusTraversable(false);
                 btnDel.setFocusTraversable(false);
-                
+
                 btnVoir.setOnAction(e -> {
                     RapportAudit r = getTableView().getItems().get(getIndex());
                     rapportSelectionne = r;
@@ -213,9 +385,11 @@ public class MainController {
         detailView.setVisible(false);
         allReportsView.setVisible(false);
         mettreAJourCompteurs();
-        
+
         ObservableList<RapportAudit> rapports = service.getTous();
-        
+
+        // Lancer l'analyse IA de priorité
+        afficherRecommandationIA(rapports);
         // 1. Statistiques Globales
         int totalReco = 0;
         int resolues = 0;
@@ -225,13 +399,17 @@ public class MainController {
         for (RapportAudit r : rapports) {
             totalReco += r.getRecommandations().size();
             for (Recommandation reco : r.getRecommandations()) {
-                if (reco.isResolue()) resolues++;
+                if (reco.isResolue())
+                    resolues++;
                 String p = reco.getPriorite().toLowerCase();
-                if (p.contains("haut")) pHaute++;
-                else if (p.contains("moy")) pMoyenne++;
-                else pBasse++;
+                if (p.contains("haut"))
+                    pHaute++;
+                else if (p.contains("moy"))
+                    pMoyenne++;
+                else
+                    pBasse++;
             }
-            
+
             switch (r.getStatut()) {
                 case BROUILLON -> statusBrouillon++;
                 case EN_COURS -> statusEnCours++;
@@ -257,6 +435,24 @@ public class MainController {
         series.getData().add(new XYChart.Data<>("Basse", pBasse));
         chartPriorite.getData().add(series);
 
+        // 3.5 LineChart Tendance des Créations
+        if (chartTendance != null) {
+            chartTendance.getData().clear();
+            XYChart.Series<String, Number> seriesTendance = new XYChart.Series<>();
+            
+            java.util.Map<String, Long> countParDate = rapports.stream()
+                .collect(java.util.stream.Collectors.groupingBy(
+                    r -> r.getDateCreation().toString(), 
+                    java.util.stream.Collectors.counting()
+                ));
+                
+            countParDate.entrySet().stream()
+                .sorted(java.util.Map.Entry.comparingByKey())
+                .forEach(e -> seriesTendance.getData().add(new XYChart.Data<>(e.getKey(), e.getValue())));
+                
+            chartTendance.getData().add(seriesTendance);
+        }
+
         // 4. Activités Récentes (3 derniers rapports)
         vboxRecentReports.getChildren().clear();
         List<RapportAudit> recent = rapports.stream()
@@ -267,50 +463,169 @@ public class MainController {
         for (RapportAudit r : recent) {
             HBox item = new HBox(15);
             item.setAlignment(Pos.CENTER_LEFT);
-            item.setStyle("-fx-padding: 10; -fx-background-color: #f9f9f9; -fx-background-radius: 8; -fx-border-color: #eee; -fx-border-radius: 8;");
-            
+            item.setStyle(
+                    "-fx-padding: 10; -fx-background-color: #f9f9f9; -fx-background-radius: 8; -fx-border-color: #eee; -fx-border-radius: 8;");
+
             VBox txt = new VBox(2);
             Label titre = new Label(r.getTitre());
             titre.setStyle("-fx-font-weight: bold; -fx-text-fill: #2c3e50;");
             Label date = new Label("Créé le " + r.getDateCreation() + " | " + r.getStatut());
             date.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
             txt.getChildren().addAll(titre, date);
-            
+
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
-            
+
             Button btn = new Button("Voir");
-            btn.setStyle("-fx-background-color: white; -fx-border-color: #3498db; -fx-text-fill: #3498db; -fx-border-radius: 5;");
+            btn.setStyle(
+                    "-fx-background-color: white; -fx-border-color: #3498db; -fx-text-fill: #3498db; -fx-border-radius: 5;");
             btn.setFocusTraversable(false);
             btn.setOnAction(e -> {
                 rapportSelectionne = r;
                 showReportDetails(r);
             });
-            
+
             item.getChildren().addAll(txt, spacer, btn);
             vboxRecentReports.getChildren().add(item);
         }
     }
 
     private void rafraichirListe() {
-        rapportsTable.setItems(service.getTous());
+        updateFiltreNomList();
+        appliquerFiltreEtPagination();
         mettreAJourCompteurs();
     }
-
 
     private void showReportDetails(RapportAudit rapport) {
         dashboardView.setVisible(false);
         allReportsView.setVisible(false);
         detailView.setVisible(true);
-        
+
+        // En-tête
         lblSelectedTitre.setText(rapport.getTitre());
-        lblSelectedSub.setText(rapport.getEntiteAuditee() + " — Audité par " + rapport.getAuditeur());
-        
+        lblInfoEntite.setText(rapport.getEntiteAuditee());
+        lblInfoAuditeur.setText(rapport.getAuditeur());
+        lblDateCreation.setText(rapport.getDateCreation() != null ? rapport.getDateCreation().toString() : "-");
+        lblSelectedSub.setText(rapport.getDateMiseAJour() != null ? rapport.getDateMiseAJour().toString() : "-");
+
+        // Description complète (Label wrappé, pas de scroll)
+        String desc = rapport.getDescription();
+        txtDescriptionRapport.setText(desc != null && !desc.isBlank() ? desc : "Aucune description disponible.");
+
+        // Badge statut coloré
+        lblStatutBadge.setText(rapport.getStatut().name().replace("_", " "));
+        switch (rapport.getStatut()) {
+            case EN_COURS  -> lblStatutBadge.setStyle("-fx-background-color: #e67e22; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 3 12; -fx-font-size: 11px; -fx-font-weight: bold;");
+            case FINALISE  -> lblStatutBadge.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 3 12; -fx-font-size: 11px; -fx-font-weight: bold;");
+            case BROUILLON -> lblStatutBadge.setStyle("-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 3 12; -fx-font-size: 11px; -fx-font-weight: bold;");
+            default        -> lblStatutBadge.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 3 12; -fx-font-size: 11px; -fx-font-weight: bold;");
+        }
+
         recoTable.setItems(FXCollections.observableArrayList(rapport.getRecommandations()));
-        
+        mettreAJourScoreResolution(rapport);
+
+        // Rafraîchir risques depuis la BD
+        List<Risque> risques = service.getRisques(rapport.getId());
+        rapport.setRisques(risques);
+        rafraichirTableauRisques(rapport);
+
         btnAjouterReco.setDisable(false);
         btnAnalyserIA.setDisable(false);
         btnDetecterRisques.setDisable(false);
+    }
+
+    private void afficherRecommandationIA(ObservableList<RapportAudit> rapports) {
+        if (rapports == null || rapports.isEmpty()) {
+            lblAIRapportTitre.setText("Aucun rapport disponible.");
+            lblAIRaison.setText("");
+            btnVoirRapportAI.setDisable(true);
+            return;
+        }
+        // Lancer dans un thread pour ne pas bloquer l'UI
+        lblAIRapportTitre.setText("Analyse en cours...");
+        lblAIRaison.setText("");
+        progressPrioriteAI.setProgress(-1); // indeterminate
+        btnRefreshAI.setDisable(true);
+        btnVoirRapportAI.setDisable(true);
+
+        javafx.concurrent.Task<AIService.PrioriteResult> task = new javafx.concurrent.Task<>() {
+            @Override
+            protected AIService.PrioriteResult call() {
+                return aiService.calculeRapportPrioritaire(new java.util.ArrayList<>(rapports));
+            }
+        };
+        task.setOnSucceeded(ev -> {
+            AIService.PrioriteResult result = task.getValue();
+            if (result == null) {
+                lblAIRapportTitre.setText("Aucun rapport à prioriser.");
+                lblAIRaison.setText("");
+                progressPrioriteAI.setProgress(0);
+                return;
+            }
+            rapportPrioritaireIA = result.rapport;
+            lblAIRapportTitre.setText(result.rapport.getTitre());
+            lblAIRaison.setText(result.rapport.getEntiteAuditee() + " — Audité par " + result.rapport.getAuditeur());
+            lblAIDetail.setText(result.raison);
+
+            // Score max théorique: calculé dynamiquement
+            int maxScore = Math.max(result.score, 1);
+            // On cap à 100
+            int pct = Math.min(result.score * 100 / Math.max(maxScore * 2, 20), 100);
+            progressPrioriteAI.setProgress(pct / 100.0);
+            lblScoreAI.setText(result.score + " pts");
+
+            // Couleur badge selon urgence
+            if (result.score >= 15) {
+                lblAIPriorityBadge.setText("🔴");
+                progressPrioriteAI.setStyle("-fx-accent: #e74c3c;");
+                lblScoreAI.setStyle("-fx-font-size: 11; -fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            } else if (result.score >= 8) {
+                lblAIPriorityBadge.setText("🟠");
+                progressPrioriteAI.setStyle("-fx-accent: #e67e22;");
+                lblScoreAI.setStyle("-fx-font-size: 11; -fx-text-fill: #e67e22; -fx-font-weight: bold;");
+            } else {
+                lblAIPriorityBadge.setText("🟡");
+                progressPrioriteAI.setStyle("-fx-accent: #f1c40f;");
+                lblScoreAI.setStyle("-fx-font-size: 11; -fx-text-fill: #d4ac0d; -fx-font-weight: bold;");
+            }
+
+            btnVoirRapportAI.setDisable(false);
+            btnRefreshAI.setDisable(false);
+        });
+        task.setOnFailed(ev -> {
+            lblAIRapportTitre.setText("Erreur d'analyse IA.");
+            progressPrioriteAI.setProgress(0);
+            btnRefreshAI.setDisable(false);
+        });
+        Thread t = new Thread(task);
+        t.setDaemon(true);
+        t.start();
+    }
+
+    @FXML
+    public void refreshAIRecommendation() {
+        afficherRecommandationIA(service.getTous());
+    }
+
+    @FXML
+    public void voirRapportPrioritaire() {
+        if (rapportPrioritaireIA != null) {
+            rapportSelectionne = rapportPrioritaireIA;
+            showReportDetails(rapportPrioritaireIA);
+        }
+    }
+
+    private void rafraichirTableauRisques(RapportAudit rapport) {
+        List<Risque> risques = rapport.getRisques();
+        risqueTable.setItems(FXCollections.observableArrayList(risques));
+        int nb = risques.size();
+        lblRisqueCount.setText(String.valueOf(nb));
+        // Badge rouge si risques présents, gris sinon
+        if (nb > 0) {
+            lblRisqueCount.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 2 8; -fx-font-size: 11px; -fx-font-weight: bold;");
+        } else {
+            lblRisqueCount.setStyle("-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 2 8; -fx-font-size: 11px; -fx-font-weight: bold;");
+        }
     }
 
     @FXML
@@ -345,7 +660,6 @@ public class MainController {
         ouvrirFormulaireRapport(null);
     }
 
-
     private void ouvrirFormulaireRapport(RapportAudit rapport) {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -376,18 +690,19 @@ public class MainController {
     }
 
     private void voirDetailsRapport(RapportAudit rapport) {
-        if (rapport == null) return;
+        if (rapport == null)
+            return;
 
         Alert details = new Alert(Alert.AlertType.INFORMATION);
         details.setTitle("Détails du Rapport");
         details.setHeaderText(rapport.getTitre());
         details.setContentText(
                 "🏢 Entité: " + rapport.getEntiteAuditee() + "\n" +
-                "👤 Auditeur: " + rapport.getAuditeur() + "\n" +
-                "📅 Date: " + rapport.getDateCreation() + "\n" +
-                "📊 Statut: " + rapport.getStatut() + "\n\n" +
-                "📝 Description:\n" + (rapport.getDescription() != null ? rapport.getDescription() : "Aucune description")
-        );
+                        "👤 Auditeur: " + rapport.getAuditeur() + "\n" +
+                        "📅 Date: " + rapport.getDateCreation() + "\n" +
+                        "📊 Statut: " + rapport.getStatut() + "\n\n" +
+                        "📝 Description:\n"
+                        + (rapport.getDescription() != null ? rapport.getDescription() : "Aucune description"));
         details.getDialogPane().setPrefWidth(450);
         details.show();
     }
@@ -404,13 +719,14 @@ public class MainController {
         fileChooser.setTitle("Enregistrer le rapport Excel");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
         fileChooser.setInitialFileName("Rapports_Audit_Complet.xlsx");
-        
+
         File file = fileChooser.showSaveDialog(dashboardView.getScene().getWindow());
-        if (file == null) return;
+        if (file == null)
+            return;
 
         try (Workbook workbook = new XSSFWorkbook();
-             FileOutputStream fileOut = new FileOutputStream(file)) {
-            
+                FileOutputStream fileOut = new FileOutputStream(file)) {
+
             Sheet sheet = workbook.createSheet("Rapports");
 
             // Style d'en-tête
@@ -424,7 +740,7 @@ public class MainController {
             headerStyle.setAlignment(HorizontalAlignment.CENTER);
 
             // En-têtes
-            String[] headers = {"Titre", "Auditeur", "Entité", "Statut", "Date Création", "Nb Reco"};
+            String[] headers = { "Titre", "Auditeur", "Entité", "Statut", "Date Création", "Nb Reco" };
             Row headerRow = sheet.createRow(0);
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
@@ -450,7 +766,7 @@ public class MainController {
             }
 
             workbook.write(fileOut);
-            
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Export Réussi");
             alert.setHeaderText(null);
@@ -475,9 +791,10 @@ public class MainController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
         String safeTitre = rapportSelectionne.getTitre().replaceAll("[^a-zA-Z0-9]", "_");
         fileChooser.setInitialFileName("Rapport_Audit_" + safeTitre + ".pdf");
-        
+
         File file = fileChooser.showSaveDialog(dashboardView.getScene().getWindow());
-        if (file == null) return;
+        if (file == null)
+            return;
 
         try {
             com.lowagie.text.Document document = new com.lowagie.text.Document(com.lowagie.text.PageSize.A4);
@@ -485,10 +802,14 @@ public class MainController {
             document.open();
 
             // Polices
-            com.lowagie.text.Font titleFont = com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 18, com.lowagie.text.Font.BOLD, Color.DARK_GRAY);
-            com.lowagie.text.Font headerFont = com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 12, com.lowagie.text.Font.BOLD, Color.WHITE);
-            com.lowagie.text.Font normalFont = com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA, 11);
-            com.lowagie.text.Font boldFont = com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 11);
+            com.lowagie.text.Font titleFont = com.lowagie.text.FontFactory.getFont(
+                    com.lowagie.text.FontFactory.HELVETICA_BOLD, 18, com.lowagie.text.Font.BOLD, Color.DARK_GRAY);
+            com.lowagie.text.Font headerFont = com.lowagie.text.FontFactory
+                    .getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 12, com.lowagie.text.Font.BOLD, Color.WHITE);
+            com.lowagie.text.Font normalFont = com.lowagie.text.FontFactory
+                    .getFont(com.lowagie.text.FontFactory.HELVETICA, 11);
+            com.lowagie.text.Font boldFont = com.lowagie.text.FontFactory
+                    .getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 11);
 
             // Titre
             Paragraph pTitle = new Paragraph("RAPPORT D'AUDIT", titleFont);
@@ -510,7 +831,8 @@ public class MainController {
             document.add(new Paragraph(" "));
 
             // Recommandations
-            document.add(new Paragraph("RECOMMANDATIONS", com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 14)));
+            document.add(new Paragraph("RECOMMANDATIONS",
+                    com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 14)));
             document.add(new Paragraph(" "));
 
             PdfPTable table = new PdfPTable(3);
@@ -519,7 +841,7 @@ public class MainController {
             table.setSpacingAfter(10f);
 
             // En-têtes de table
-            String[] headers = {"Description", "Priorité", "Résolue"};
+            String[] headers = { "Description", "Priorité", "Résolue" };
             for (String h : headers) {
                 com.lowagie.text.pdf.PdfPCell cell = new com.lowagie.text.pdf.PdfPCell(new Phrase(h, headerFont));
                 cell.setBackgroundColor(Color.GRAY);
@@ -609,7 +931,8 @@ public class MainController {
 
     @FXML
     public void genererRecoIA() {
-        if (rapportSelectionne == null) return;
+        if (rapportSelectionne == null)
+            return;
 
         // Désactiver le bouton pendant le chargement
         btnAnalyserIA.setDisable(true);
@@ -659,9 +982,11 @@ public class MainController {
         thread.setDaemon(true);
         thread.start();
     }
+
     @FXML
     public void genererRisquesIA() {
-        if (rapportSelectionne == null) return;
+        if (rapportSelectionne == null)
+            return;
 
         btnDetecterRisques.setDisable(true);
 
@@ -676,12 +1001,14 @@ public class MainController {
         task.setOnSucceeded(e -> {
             Risque r = task.getValue();
             if (r != null) {
-                // Sauvegarder en base de données pour que ce soit visible dans le rapport
                 service.ajouterRisque(rapportSelectionne.getId(), r);
                 rapportSelectionne.getRisques().add(r);
 
+                // Rafraîchir le tableau des risques en temps réel
+                rafraichirTableauRisques(rapportSelectionne);
+
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Analyse de Risques IA");
+                alert.setTitle("⚠ Analyse de Risques IA");
                 alert.setHeaderText("Risque détecté : " + r.getNiveau());
                 alert.setContentText("Description : " + r.getDescription() + "\n\nImpact : " + r.getImpact());
                 alert.getDialogPane().setMinWidth(400);
@@ -693,41 +1020,104 @@ public class MainController {
         new Thread(task).start();
     }
 
+    private void ajouterBoutonRisque() {
+        if (colActionsRisque == null) return;
+        colActionsRisque.setCellFactory(param -> new TableCell<>() {
+            private final Button btnDelete = new Button("Supprimer");
 
+            {
+                btnDelete.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 10px;");
+                btnDelete.setOnAction(event -> {
+                    Risque risque = getTableView().getItems().get(getIndex());
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirm.setTitle("Suppression Risque");
+                    confirm.setHeaderText("Supprimer ce risque ?");
+                    confirm.setContentText(risque.getDescription());
+                    confirm.showAndWait().ifPresent(res -> {
+                        if (res == ButtonType.OK) {
+                            service.supprimerRisque(risque.getId());
+                            if (rapportSelectionne != null) {
+                                rapportSelectionne.setRisques(service.getRisques(rapportSelectionne.getId()));
+                                rafraichirTableauRisques(rapportSelectionne);
+                            }
+                        }
+                    });
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    HBox box = new HBox(btnDelete);
+                    box.setAlignment(Pos.CENTER);
+                    setGraphic(box);
+                }
+            }
+        });
+    }
+
+    private void ajouterIconeAlerteRisque() {
+        colRisqueAlerte.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                    return;
+                }
+                Risque r = getTableView().getItems().get(getIndex());
+                Label icon = new Label();
+                icon.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+                switch (r.getNiveau() != null ? r.getNiveau().toLowerCase() : "") {
+                    case "critique" -> { icon.setText("🔴"); icon.setStyle("-fx-font-size:16px;"); }
+                    case "élevé", "eleve" -> { icon.setText("🟠"); }
+                    case "moyen" -> { icon.setText("🟡"); }
+                    default -> { icon.setText("🟢"); }
+                }
+                setGraphic(icon);
+                setStyle("-fx-alignment: CENTER;");
+            }
+        });
+    }
 
     // ─── Boutons dans les tableaux ────────────────────────────
-
 
     private void ajouterBoutonsReco() {
         colActionsReco.setCellFactory(col -> new TableCell<>() {
             private final Button btnToggle = new Button();
             private final Button btnEdit = new Button("Edit");
             private final Button btnDel = new Button("Supp");
-            private final javafx.scene.layout.HBox box =
-                    new javafx.scene.layout.HBox(5, btnToggle, btnEdit, btnDel);
+            private final javafx.scene.layout.HBox box = new javafx.scene.layout.HBox(5, btnToggle, btnEdit, btnDel);
 
             {
-                btnEdit.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
-                btnDel.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
-                
+                btnEdit.setStyle(
+                        "-fx-background-color: #f39c12; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
+                btnDel.setStyle(
+                        "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
+
                 btnToggle.setFocusTraversable(false);
                 btnEdit.setFocusTraversable(false);
                 btnDel.setFocusTraversable(false);
-                
+
                 btnToggle.setOnAction(e -> {
                     Recommandation reco = getTableView().getItems().get(getIndex());
                     boolean oldStatus = reco.isResolue();
                     reco.setResolue(!oldStatus);
-                    System.out.println("DEBUG Admin: Toggle reco " + reco.getId() + " from " + oldStatus + " to " + reco.isResolue());
-                    
+                    System.out.println("DEBUG Admin: Toggle reco " + reco.getId() + " from " + oldStatus + " to "
+                            + reco.isResolue());
+
                     service.modifierRecommandation(reco);
-                    
+
                     // Refresh data
                     if (rapportSelectionne != null) {
                         rapportSelectionne.setRecommandations(service.getRecommandations(rapportSelectionne.getId()));
                         recoTable.setItems(FXCollections.observableArrayList(rapportSelectionne.getRecommandations()));
+                        mettreAJourScoreResolution(rapportSelectionne);
                     }
-                    
+
                     getTableView().refresh();
                     mettreAJourCompteurs();
                 });
@@ -746,10 +1136,12 @@ public class MainController {
                     Recommandation reco = getTableView().getItems().get(getIndex());
                     if (reco.isResolue()) {
                         btnToggle.setText("Ouvrir");
-                        btnToggle.setStyle("-fx-background-color: #bdc3c7; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-size: 11px;");
+                        btnToggle.setStyle(
+                                "-fx-background-color: #bdc3c7; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-size: 11px;");
                     } else {
                         btnToggle.setText("Résoudre");
-                        btnToggle.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
+                        btnToggle.setStyle(
+                                "-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
                     }
                     setGraphic(box);
                 }
@@ -761,9 +1153,124 @@ public class MainController {
 
     private void mettreAJourCompteurs() {
         lblTotalRapports.setText(service.getTous().size() + " rapport(s)");
-        int nbReco = rapportSelectionne != null ?
-                rapportSelectionne.getRecommandations().size() : 0;
+        int nbReco = rapportSelectionne != null ? rapportSelectionne.getRecommandations().size() : 0;
         lblTotalReco.setText(nbReco + " recommandation(s)");
+        
+        // Mettre à jour la cloche de notification
+        int totalNotifs = 0;
+        notifMenu.getItems().clear();
+        
+        javafx.scene.layout.VBox itemsBox = new javafx.scene.layout.VBox();
+        itemsBox.setStyle("-fx-background-color: white;");
+
+        for (RapportAudit r : service.getTous()) {
+            // 1. Alertes critiques (Rouge)
+            long countCritique = r.getRecommandations().stream()
+                .filter(reco -> !reco.isResolue() && "Haute".equalsIgnoreCase(reco.getPriorite()))
+                .count();
+                
+            if (countCritique > 0) {
+                totalNotifs++;
+                String pluriel = countCritique > 1 ? "s" : "";
+                String titleText = countCritique + " reco" + pluriel + " critique" + pluriel + " non résolue" + pluriel;
+                String subText = "Dans : " + r.getTitre();
+                
+                javafx.scene.layout.HBox itemBox = creerLigneNotification("🔴", "#c0392b", titleText, subText, r);
+                itemsBox.getChildren().add(itemBox);
+            }
+            
+            // 2. Alertes finalisées (Vert)
+            if (r.getStatut() == com.audit.auditaifx.model.StatutRapport.FINALISE) {
+                totalNotifs++;
+                String titleText = "Rapport Finalisé";
+                String subText = r.getTitre() + " a été finalisé";
+                
+                javafx.scene.layout.HBox itemBox = creerLigneNotification("🟢", "#27ae60", titleText, subText, r);
+                itemsBox.getChildren().add(itemBox);
+            }
+        }
+
+        if (totalNotifs == 0) {
+            javafx.scene.control.Label emptyLbl = new javafx.scene.control.Label("Aucune notification");
+            emptyLbl.setStyle("-fx-text-fill: gray; -fx-font-style: italic; -fx-padding: 15;");
+            itemsBox.getChildren().add(emptyLbl);
+        }
+
+        if (lblNotifCount != null) {
+            lblNotifCount.setText(String.valueOf(totalNotifs));
+            lblNotifCount.setVisible(totalNotifs > 0);
+        }
+        
+        javafx.scene.control.ScrollPane scrollPane = new javafx.scene.control.ScrollPane(itemsBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(javafx.scene.control.ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 0;");
+        
+        double height = totalNotifs == 0 ? 40 : Math.min(totalNotifs * 45, 250);
+        scrollPane.setPrefViewportHeight(height);
+        scrollPane.setPrefViewportWidth(280);
+        
+        javafx.scene.control.CustomMenuItem customItem = new javafx.scene.control.CustomMenuItem(scrollPane);
+        customItem.setHideOnClick(false);
+        notifMenu.getItems().add(customItem);
+    }
+
+    private javafx.scene.layout.HBox creerLigneNotification(String emoji, String colorHex, String titleText, String subText, RapportAudit r) {
+        javafx.scene.layout.HBox itemBox = new javafx.scene.layout.HBox(8);
+        itemBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        itemBox.setStyle("-fx-padding: 6 10; -fx-background-color: transparent; -fx-cursor: hand; -fx-border-width: 0 0 1 0; -fx-border-color: #f5f5f5;");
+        
+        itemBox.setOnMouseEntered(e -> itemBox.setStyle("-fx-padding: 6 10; -fx-background-color: #f9f9f9; -fx-cursor: hand; -fx-border-width: 0 0 1 0; -fx-border-color: #f5f5f5;"));
+        itemBox.setOnMouseExited(e -> itemBox.setStyle("-fx-padding: 6 10; -fx-background-color: transparent; -fx-cursor: hand; -fx-border-width: 0 0 1 0; -fx-border-color: #f5f5f5;"));
+        
+        javafx.scene.control.Label icon = new javafx.scene.control.Label(emoji);
+        icon.setStyle("-fx-font-size: 8px;");
+        
+        javafx.scene.layout.VBox texts = new javafx.scene.layout.VBox(1);
+        javafx.scene.control.Label title = new javafx.scene.control.Label(titleText);
+        title.setStyle("-fx-text-fill: " + colorHex + "; -fx-font-size: 11px; -fx-font-weight: bold;");
+        javafx.scene.control.Label subtitle = new javafx.scene.control.Label(subText);
+        subtitle.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 9px;");
+        texts.getChildren().addAll(title, subtitle);
+        
+        itemBox.getChildren().addAll(icon, texts);
+        
+        itemBox.setOnMouseClicked(e -> {
+            notifMenu.hide();
+            rapportSelectionne = r;
+            showReportDetails(r);
+        });
+        return itemBox;
+    }
+
+    @FXML
+    public void afficherMenuNotifications(javafx.scene.input.MouseEvent event) {
+        if (paneNotifIcon != null) {
+            notifMenu.show(paneNotifIcon, javafx.geometry.Side.BOTTOM, 0, 0);
+        }
+    }
+
+    private void mettreAJourScoreResolution(RapportAudit rapport) {
+        if (rapport == null || progressResolution == null) return;
+        List<Recommandation> recos = rapport.getRecommandations();
+        int total = recos.size();
+        int resolues = (int) recos.stream().filter(Recommandation::isResolue).count();
+        double pct = total == 0 ? 0.0 : (double) resolues / total;
+        progressResolution.setProgress(pct);
+        lblScoreResolution.setText((int)(pct * 100) + "%");
+        lblRecoStats.setText(resolues + " / " + total + " résolues");
+        // Couleur dynamique selon le taux
+        if (pct >= 0.75) {
+            progressResolution.setStyle("-fx-accent: #27ae60;");
+            lblScoreResolution.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #27ae60;");
+        } else if (pct >= 0.4) {
+            progressResolution.setStyle("-fx-accent: #f39c12;");
+            lblScoreResolution.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #e67e22;");
+        } else {
+            progressResolution.setStyle("-fx-accent: #e74c3c;");
+            lblScoreResolution.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
+        }
     }
 
     private void afficherErreur(String msg) {
@@ -774,6 +1281,13 @@ public class MainController {
     }
 
     @FXML
+    public void creerNouveauRapport() {
+        // TODO: Implémenter la création d'un nouveau rapport (ouvrir popup ou form)
+        System.out.println("DEBUG: Créer un nouveau rapport (à implémenter)");
+        afficherErreur("Création de rapport - Fonctionnalité en cours de développement");
+    }
+
+    @FXML
     public void switchClient() {
         try {
             var resource = getClass().getResource("/com/audit/auditaifx/client-view.fxml");
@@ -781,9 +1295,9 @@ public class MainController {
                 afficherErreur("Fichier client-view.fxml introuvable dans les ressources.");
                 return;
             }
-            FXMLLoader loader = new FXMLLoader(resource);
-            Parent root = loader.load();
-            Stage stage = (Stage) dashboardView.getScene().getWindow();
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(resource);
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = (javafx.stage.Stage) dashboardView.getScene().getWindow();
             stage.getScene().setRoot(root);
         } catch (Exception e) {
             e.printStackTrace(); // Print to console for debugging

@@ -19,17 +19,37 @@ public class Risque {
         this.impact = impact;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String d) { this.description = d; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getNiveau() { return niveau; }
-    public void setNiveau(String n) { this.niveau = n; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getImpact() { return impact; }
-    public void setImpact(String i) { this.impact = i; }
+    public void setDescription(String d) {
+        this.description = d;
+    }
+
+    public String getNiveau() {
+        return niveau;
+    }
+
+    public void setNiveau(String n) {
+        this.niveau = n;
+    }
+
+    public String getImpact() {
+        return impact;
+    }
+
+    public void setImpact(String i) {
+        this.impact = i;
+    }
 
     @Override
     public String toString() {

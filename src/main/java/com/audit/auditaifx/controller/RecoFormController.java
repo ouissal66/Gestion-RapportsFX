@@ -10,11 +10,16 @@ import javafx.stage.Stage;
 
 public class RecoFormController {
 
-    @FXML private TextArea  txtDescription;
-    @FXML private ComboBox<String> cmbPriorite;
-    @FXML private CheckBox  chkResolue;
-    @FXML private Label     lblErreurDescription;
-    @FXML private Label     lblErreurPriorite;
+    @FXML
+    private TextArea txtDescription;
+    @FXML
+    private ComboBox<String> cmbPriorite;
+    @FXML
+    private CheckBox chkResolue;
+    @FXML
+    private Label lblErreurDescription;
+    @FXML
+    private Label lblErreurPriorite;
 
     private RapportAudit rapport;
     private Recommandation recommandation;
@@ -56,14 +61,14 @@ public class RecoFormController {
 
     @FXML
     public void sauvegarder() {
-        if (!valider()) return;
+        if (!valider())
+            return;
 
         if (recommandation == null) {
             // Création
             Recommandation nouvelle = new Recommandation(
                     txtDescription.getText().trim(),
-                    cmbPriorite.getValue()
-            );
+                    cmbPriorite.getValue());
             nouvelle.setResolue(chkResolue.isSelected());
             rapport.ajouterRecommandation(nouvelle);
             if (service != null && rapport.getId() != null) {
@@ -79,7 +84,8 @@ public class RecoFormController {
             }
         }
 
-        if (onSave != null) onSave.run();
+        if (onSave != null)
+            onSave.run();
         fermer();
     }
 

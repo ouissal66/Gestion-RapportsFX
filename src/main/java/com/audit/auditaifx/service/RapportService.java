@@ -29,10 +29,11 @@ public class RapportService {
     // ─── Créer tables si elles n'existent pas ────────────────
 
     private void creerTablesInitiales() {
-        if (conn == null) return;
+        if (conn == null)
+            return;
         try {
             Statement st = conn.createStatement();
-            
+
             System.out.println("🔍 Vérification des tables...");
             boolean needRepair = false;
             try {
@@ -52,40 +53,40 @@ public class RapportService {
             }
 
             st.execute("""
-                CREATE TABLE IF NOT EXISTS audit_rapport (
-                    id VARCHAR(36) PRIMARY KEY,
-                    titre VARCHAR(200) NOT NULL,
-                    auditeur VARCHAR(100) NOT NULL,
-                    entite_auditee VARCHAR(100) NOT NULL,
-                    statut VARCHAR(50) NOT NULL,
-                    description TEXT,
-                    date_creation DATE NOT NULL,
-                    date_mise_a_jour DATE NOT NULL
-                ) ENGINE=InnoDB;
-            """);
-            
+                        CREATE TABLE IF NOT EXISTS audit_rapport (
+                            id VARCHAR(36) PRIMARY KEY,
+                            titre VARCHAR(200) NOT NULL,
+                            auditeur VARCHAR(100) NOT NULL,
+                            entite_auditee VARCHAR(100) NOT NULL,
+                            statut VARCHAR(50) NOT NULL,
+                            description TEXT,
+                            date_creation DATE NOT NULL,
+                            date_mise_a_jour DATE NOT NULL
+                        ) ENGINE=InnoDB;
+                    """);
+
             st.execute("""
-                CREATE TABLE IF NOT EXISTS audit_reco (
-                    id VARCHAR(36) PRIMARY KEY,
-                    rapport_id VARCHAR(36) NOT NULL,
-                    description TEXT NOT NULL,
-                    priorite VARCHAR(20) NOT NULL,
-                    resolue BOOLEAN DEFAULT FALSE,
-                    FOREIGN KEY (rapport_id)
-                        REFERENCES audit_rapport(id)
-                        ON DELETE CASCADE
-                ) ENGINE=InnoDB;
-            """);
+                        CREATE TABLE IF NOT EXISTS audit_reco (
+                            id VARCHAR(36) PRIMARY KEY,
+                            rapport_id VARCHAR(36) NOT NULL,
+                            description TEXT NOT NULL,
+                            priorite VARCHAR(20) NOT NULL,
+                            resolue BOOLEAN DEFAULT FALSE,
+                            FOREIGN KEY (rapport_id)
+                                REFERENCES audit_rapport(id)
+                                ON DELETE CASCADE
+                        ) ENGINE=InnoDB;
+                    """);
             st.execute("""
-                CREATE TABLE IF NOT EXISTS audit_risque (
-                    id VARCHAR(50) PRIMARY KEY,
-                    rapport_id VARCHAR(50),
-                    description TEXT,
-                    niveau VARCHAR(20),
-                    impact TEXT,
-                    FOREIGN KEY (rapport_id) REFERENCES audit_rapport(id) ON DELETE CASCADE
-                )
-            """);
+                        CREATE TABLE IF NOT EXISTS audit_risque (
+                            id VARCHAR(50) PRIMARY KEY,
+                            rapport_id VARCHAR(50),
+                            description TEXT,
+                            niveau VARCHAR(20),
+                            impact TEXT,
+                            FOREIGN KEY (rapport_id) REFERENCES audit_rapport(id) ON DELETE CASCADE
+                        )
+                    """);
 
             System.out.println("✅ Structure de la base de données opérationnelle.");
         } catch (SQLException e) {
@@ -97,13 +98,14 @@ public class RapportService {
     // ─── CRUD Rapport ─────────────────────────────────────────
 
     public void ajouter(RapportAudit r) {
-        if (conn == null) return;
+        if (conn == null)
+            return;
         String sql = """
-            INSERT INTO audit_rapport
-            (id, titre, auditeur, entite_auditee, statut, description,
-             date_creation, date_mise_a_jour)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+                    INSERT INTO audit_rapport
+                    (id, titre, auditeur, entite_auditee, statut, description,
+                     date_creation, date_mise_a_jour)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, r.getId());
             ps.setString(2, r.getTitre());
@@ -125,13 +127,14 @@ public class RapportService {
     }
 
     public void modifier(RapportAudit r) {
-        if (conn == null) return;
+        if (conn == null)
+            return;
         String sql = """
-            UPDATE audit_rapport SET
-                titre=?, auditeur=?, entite_auditee=?,
-                statut=?, description=?, date_mise_a_jour=?
-            WHERE id=?
-        """;
+                    UPDATE audit_rapport SET
+                        titre=?, auditeur=?, entite_auditee=?,
+                        statut=?, description=?, date_mise_a_jour=?
+                    WHERE id=?
+                """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, r.getTitre());
             ps.setString(2, r.getAuditeur());
@@ -147,7 +150,8 @@ public class RapportService {
     }
 
     public void supprimer(RapportAudit r) {
-        if (conn == null) return;
+        if (conn == null)
+            return;
         String sql = "DELETE FROM audit_rapport WHERE id=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, r.getId());
@@ -159,10 +163,11 @@ public class RapportService {
 
     public ObservableList<RapportAudit> getTous() {
         ObservableList<RapportAudit> liste = FXCollections.observableArrayList();
-        if (conn == null) return liste;
+        if (conn == null)
+            return liste;
         String sql = "SELECT * FROM audit_rapport";
         try (Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+                ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 RapportAudit r = new RapportAudit();
                 r.setId(rs.getString("id"));
@@ -185,7 +190,8 @@ public class RapportService {
     // ─── CRUD Risque ──────────────────────────────────────────
 
     public void ajouterRisque(String rapportId, Risque risque) {
-        if (conn == null) return;
+        if (conn == null)
+            return;
         String sql = "INSERT INTO audit_risque (id, rapport_id, description, niveau, impact) VALUES (?, ?, ?, ?, ?)";
         String newId = UUID.randomUUID().toString();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -203,7 +209,8 @@ public class RapportService {
 
     public List<Risque> getRisques(String rapportId) {
         List<Risque> liste = new ArrayList<>();
-        if (conn == null) return liste;
+        if (conn == null)
+            return liste;
         String sql = "SELECT * FROM audit_risque WHERE rapport_id=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, rapportId);
@@ -212,8 +219,7 @@ public class RapportService {
                 Risque r = new Risque(
                         rs.getString("description"),
                         rs.getString("niveau"),
-                        rs.getString("impact")
-                );
+                        rs.getString("impact"));
                 r.setId(rs.getString("id"));
                 liste.add(r);
             }
@@ -236,7 +242,8 @@ public class RapportService {
     // ─── CRUD Recommandation ──────────────────────────────────
 
     public void ajouterRecommandation(String rapportId, Recommandation reco) {
-        if (conn == null) return;
+        if (conn == null)
+            return;
         String sql = "INSERT INTO audit_reco (id, rapport_id, description, priorite, resolue) VALUES (?, ?, ?, ?, ?)";
         String newId = UUID.randomUUID().toString();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -254,10 +261,10 @@ public class RapportService {
 
     public void modifierRecommandation(Recommandation reco) {
         String sql = """
-            UPDATE audit_reco
-            SET description=?, priorite=?, resolue=?
-            WHERE id=?
-        """;
+                    UPDATE audit_reco
+                    SET description=?, priorite=?, resolue=?
+                    WHERE id=?
+                """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, reco.getDescription());
             ps.setString(2, reco.getPriorite());
@@ -281,7 +288,8 @@ public class RapportService {
 
     public java.util.List<Recommandation> getRecommandations(String rapportId) {
         java.util.List<Recommandation> liste = new java.util.ArrayList<>();
-        if (conn == null) return liste;
+        if (conn == null)
+            return liste;
         String sql = "SELECT * FROM audit_reco WHERE rapport_id=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, rapportId);
@@ -289,8 +297,7 @@ public class RapportService {
             while (rs.next()) {
                 Recommandation reco = new Recommandation(
                         rs.getString("description"),
-                        rs.getString("priorite")
-                );
+                        rs.getString("priorite"));
                 reco.setId(rs.getString("id"));
                 reco.setResolue(rs.getBoolean("resolue"));
                 liste.add(reco);
@@ -304,9 +311,11 @@ public class RapportService {
     // ─── Données de test ──────────────────────────────────────
 
     public void chargerDonneesTest() {
-        if (conn == null) return;
+        if (conn == null)
+            return;
         // On ne charge que si la table est vide
-        if (!getTous().isEmpty()) return;
+        if (!getTous().isEmpty())
+            return;
 
         // 1. Audit Sécurité SI
         RapportAudit r1 = new RapportAudit("Audit Sécurité SI", "Ali Ben Salem", "DSI");
@@ -402,9 +411,8 @@ public class RapportService {
     }
 
     public void chargerDonneesSupplementaires() {
-        if (conn == null) return;
-        // Ajouter seulement si on a moins de 18 rapports
-        if (getTous().size() >= 18) return;
+        if (conn == null)
+            return;
 
         // 11. Audit Cybersécurité Avancé
         RapportAudit r11 = new RapportAudit("Audit Cybersécurité Avancé", "Leila Bensalem", "DSI");
@@ -484,5 +492,55 @@ public class RapportService {
         ajouter(r18);
 
         System.out.println("✅ 8 rapports supplémentaires chargés avec succès.");
+    }
+
+    public void injecterNouveauxRapports() {
+        if (conn == null) return;
+        
+        // 19. Audit Gouvernance IT
+        RapportAudit r19 = new RapportAudit("Audit Gouvernance IT", "Sophie Chen", "DSI");
+        r19.setStatut(StatutRapport.EN_COURS);
+        r19.setDateCreation(LocalDate.of(2026, 3, 10));
+        r19.setDescription("Évaluation de l'alignement stratégique de l'IT avec les objectifs métier.");
+        r19.ajouterRecommandation(new Recommandation("Mettre en place un comité de pilotage IT", "Haute"));
+        r19.ajouterRecommandation(new Recommandation("Définir des KPIs de performance", "Moyenne"));
+        ajouter(r19);
+
+        // 20. Audit Gestion des Actifs
+        RapportAudit r20 = new RapportAudit("Audit Gestion des Actifs", "Luc Petit", "Logistique");
+        r20.setStatut(StatutRapport.FINALISE);
+        r20.setDateCreation(LocalDate.of(2026, 4, 5));
+        r20.setDescription("Inventaire et suivi du cycle de vie des actifs matériels.");
+        r20.ajouterRecommandation(new Recommandation("Automatiser le suivi des amortissements", "Moyenne"));
+        r20.ajouterRecommandation(new Recommandation("Sécuriser le stockage des pièces de rechange", "Haute"));
+        ajouter(r20);
+
+        // 21. Audit Sécurité Cloud
+        RapportAudit r21 = new RapportAudit("Audit Sécurité Cloud", "Emma Wilson", "IT Operations");
+        r21.setStatut(StatutRapport.EN_COURS);
+        r21.setDateCreation(LocalDate.of(2026, 4, 20));
+        r21.setDescription("Vérification de la configuration de sécurité des environnements AWS et Azure.");
+        r21.ajouterRecommandation(new Recommandation("Restreindre les accès S3 publics", "Haute"));
+        r21.ajouterRecommandation(new Recommandation("Activer GuardDuty sur toutes les régions", "Moyenne"));
+        ajouter(r21);
+
+        // 22. Audit Conformité Fiscale
+        RapportAudit r22 = new RapportAudit("Audit Conformité Fiscale", "Jean-Paul Sartre", "Finance");
+        r22.setStatut(StatutRapport.BROUILLON);
+        r22.setDateCreation(LocalDate.of(2026, 4, 25));
+        r22.setDescription("Révision des déclarations fiscales et conformité aux nouvelles régulations.");
+        r22.ajouterRecommandation(new Recommandation("Audit des crédits d'impôt recherche", "Haute"));
+        ajouter(r22);
+
+        System.out.println("✅ Nouveaux rapports injectés pour le dashboard.");
+    }
+
+    public void initialiserDonneesSiVide() {
+        if (getTous().isEmpty()) {
+            System.out.println("🌱 Initialisation des données de démonstration...");
+            chargerDonneesTest();
+            chargerDonneesSupplementaires();
+            injecterNouveauxRapports();
+        }
     }
 }

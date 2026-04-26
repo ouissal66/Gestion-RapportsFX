@@ -15,7 +15,8 @@ public class MainApp extends Application {
                     MainApp.class.getResource("main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 900, 600);
 
-            // Ajouter le CSS (doit être fait avant de montrer le stage pour éviter le flash)
+            // Ajouter le CSS (doit être fait avant de montrer le stage pour éviter le
+            // flash)
             String css = MainApp.class.getResource("audit.css").toExternalForm();
             scene.getStylesheets().add(css);
 
@@ -25,10 +26,10 @@ public class MainApp extends Application {
             stage.setMinHeight(550);
             stage.show();
 
-            // Charger les données supplémentaires en arrière-plan
+            // Charger les données de démonstration au démarrage
             Thread seedThread = new Thread(() -> {
                 RapportService seedService = new RapportService();
-                seedService.chargerDonneesSupplementaires();
+                seedService.initialiserDonneesSiVide();
             });
             seedThread.setDaemon(true);
             seedThread.start();

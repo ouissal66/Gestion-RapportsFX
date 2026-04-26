@@ -32,30 +32,54 @@ import java.util.List;
 
 public class ClientController {
 
-    @FXML private ScrollPane lblNoSelection;
-    @FXML private VBox allReportsView;
-    @FXML private PieChart chartRecoStatus;
-    @FXML private VBox vboxRecentReportsClient;
-    @FXML private VBox vboxRecentRecosClient;
-    @FXML private TableView<RapportAudit> rapportsTable;
-    @FXML private TableColumn<RapportAudit, String> colTitre;
-    @FXML private TableColumn<RapportAudit, String> colAuditeur;
-    @FXML private TableColumn<RapportAudit, String> colDate;
-    @FXML private TableColumn<RapportAudit, String> colStatut;
-    @FXML private TableColumn<RapportAudit, Void> colActionsRapport;
-    
-    @FXML private Label lblTitre;
-    @FXML private Label lblAuditeur;
-    @FXML private Label lblDate;
-    @FXML private Label lblStatut;
-    @FXML private TextArea txtDescription;
-    
-    @FXML private VBox recommendationsContainer;
-    @FXML private VBox risquesContainer;
-    @FXML private ScrollPane detailPane;
-    @FXML private Label lblStatTotalRapports;
-    @FXML private Label lblStatTotalReco;
-    @FXML private Label lblStatRecoResolues;
+    @FXML
+    private ScrollPane lblNoSelection;
+    @FXML
+    private VBox allReportsView;
+    @FXML
+    private PieChart chartRecoStatus;
+    @FXML
+    private LineChart<String, Number> chartTendanceClient;
+    @FXML
+    private VBox vboxRecentReportsClient;
+    @FXML
+    private VBox vboxRecentRecosClient;
+    @FXML
+    private TableView<RapportAudit> rapportsTable;
+    @FXML
+    private TableColumn<RapportAudit, String> colTitre;
+    @FXML
+    private TableColumn<RapportAudit, String> colAuditeur;
+    @FXML
+    private TableColumn<RapportAudit, String> colDate;
+    @FXML
+    private TableColumn<RapportAudit, String> colStatut;
+    @FXML
+    private TableColumn<RapportAudit, Void> colActionsRapport;
+
+    @FXML
+    private Label lblTitre;
+    @FXML
+    private Label lblAuditeur;
+    @FXML
+    private Label lblDate;
+    @FXML
+    private Label lblStatut;
+    @FXML
+    private TextArea txtDescription;
+
+    @FXML
+    private VBox recommendationsContainer;
+    @FXML
+    private VBox risquesContainer;
+    @FXML
+    private ScrollPane detailPane;
+    @FXML
+    private Label lblStatTotalRapports;
+    @FXML
+    private Label lblStatTotalReco;
+    @FXML
+    private Label lblStatRecoResolues;
 
     private RapportService service = new RapportService();
     private ObservableList<RapportAudit> allReports;
@@ -88,10 +112,13 @@ public class ClientController {
             private final HBox container = new HBox(5, btnVoir, btnEdit, btnDel);
 
             {
-                btnVoir.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
-                btnEdit.setStyle("-fx-background-color: #f1c40f; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
-                btnDel.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
-                
+                btnVoir.setStyle(
+                        "-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
+                btnEdit.setStyle(
+                        "-fx-background-color: #f1c40f; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
+                btnDel.setStyle(
+                        "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4; -fx-font-size: 11px; -fx-font-weight: bold;");
+
                 btnVoir.setFocusTraversable(false);
                 btnEdit.setFocusTraversable(false);
                 btnDel.setFocusTraversable(false);
@@ -137,18 +164,19 @@ public class ClientController {
         detailPane.setVisible(false);
         allReportsView.setVisible(false);
         mettreAJourStats();
-        
+
         ObservableList<RapportAudit> rapports = service.getTous();
         int totalReco = 0;
         int resolues = 0;
-        
+
         for (RapportAudit r : rapports) {
             totalReco += r.getRecommandations().size();
             for (com.audit.auditaifx.model.Recommandation reco : r.getRecommandations()) {
-                if (reco.isResolue()) resolues++;
+                if (reco.isResolue())
+                    resolues++;
             }
         }
-        
+
         // 1. Stats Textuelles
         lblStatTotalRapports.setText(String.valueOf(rapports.size()));
         lblStatTotalReco.setText(String.valueOf(totalReco));
@@ -161,6 +189,24 @@ public class ClientController {
             chartRecoStatus.getData().add(new PieChart.Data("En attente", totalReco - resolues));
         }
 
+        // 2.5 LineChart Tendance des Créations Client
+        if (chartTendanceClient != null) {
+            chartTendanceClient.getData().clear();
+            XYChart.Series<String, Number> seriesTendance = new XYChart.Series<>();
+            
+            java.util.Map<String, Long> countParDate = rapports.stream()
+                .collect(java.util.stream.Collectors.groupingBy(
+                    r -> r.getDateCreation().toString(), 
+                    java.util.stream.Collectors.counting()
+                ));
+                
+            countParDate.entrySet().stream()
+                .sorted(java.util.Map.Entry.comparingByKey())
+                .forEach(e -> seriesTendance.getData().add(new XYChart.Data<>(e.getKey(), e.getValue())));
+                
+            chartTendanceClient.getData().add(seriesTendance);
+        }
+
         // 3. Activités Récentes (Rapports)
         vboxRecentReportsClient.getChildren().clear();
         List<RapportAudit> sortedRapports = rapports.stream()
@@ -170,7 +216,8 @@ public class ClientController {
 
         for (RapportAudit r : sortedRapports) {
             VBox card = new VBox(5);
-            card.setStyle("-fx-padding: 8; -fx-background-color: #f8f9fa; -fx-background-radius: 8; -fx-border-color: #e9ecef; -fx-border-radius: 8;");
+            card.setStyle(
+                    "-fx-padding: 8; -fx-background-color: #f8f9fa; -fx-background-radius: 8; -fx-border-color: #e9ecef; -fx-border-radius: 8;");
             Label t = new Label(r.getTitre());
             t.setStyle("-fx-font-weight: bold; -fx-font-size: 12px;");
             Label d = new Label(r.getDateCreation() + " | " + r.getStatut());
@@ -229,12 +276,13 @@ public class ClientController {
         for (Recommandation reco : report.getRecommandations()) {
             VBox card = new VBox(8);
             card.getStyleClass().add("reco-card");
-            
+
             Label desc = new Label(reco.getDescription());
             desc.setWrapText(true);
             desc.setStyle("-fx-font-weight: bold;");
-            
-            Label meta = new Label("Priorité: " + reco.getPriorite() + " | " + (reco.isResolue() ? "✅ Résolue" : "⏳ En attente"));
+
+            Label meta = new Label(
+                    "Priorité: " + reco.getPriorite() + " | " + (reco.isResolue() ? "✅ Résolue" : "⏳ En attente"));
             meta.setStyle("-fx-font-size: 11px;");
             card.getChildren().addAll(desc, meta);
             recommendationsContainer.getChildren().add(card);
@@ -246,19 +294,19 @@ public class ClientController {
             VBox card = new VBox(8);
             card.getStyleClass().add("reco-card");
             card.setStyle("-fx-border-color: #e67e22; -fx-background-color: #fff9f5;");
-            
+
             Label desc = new Label(risque.getDescription());
             desc.setWrapText(true);
             desc.setStyle("-fx-font-weight: bold; -fx-text-fill: #d35400;");
-            
+
             Label impact = new Label("Impact: " + risque.getImpact());
             impact.setWrapText(true);
             impact.setStyle("-fx-font-size: 11px;");
 
             Label niveau = new Label("Niveau: " + risque.getNiveau());
-            niveau.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: " + 
-                (risque.getNiveau().contains("Critique") ? "#c0392b" : "#e67e22") + 
-                "; -fx-padding: 2 5; -fx-background-radius: 3;");
+            niveau.setStyle("-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: " +
+                    (risque.getNiveau().contains("Critique") ? "#c0392b" : "#e67e22") +
+                    "; -fx-padding: 2 5; -fx-background-radius: 3;");
 
             card.getChildren().addAll(desc, impact, niveau);
             risquesContainer.getChildren().add(card);
@@ -266,24 +314,26 @@ public class ClientController {
     }
 
     private void mettreAJourStats() {
-        if (allReports == null) return;
-        
+        if (allReports == null)
+            return;
+
         int totalRapports = allReports.size();
         int totalReco = 0;
         int recoResolues = 0;
-        
+
         for (RapportAudit r : allReports) {
             totalReco += r.getRecommandations().size();
             for (com.audit.auditaifx.model.Recommandation reco : r.getRecommandations()) {
-                if (reco.isResolue()) recoResolues++;
+                if (reco.isResolue())
+                    recoResolues++;
             }
         }
-        
+
         lblStatTotalRapports.setText(String.valueOf(totalRapports));
         lblStatTotalReco.setText(String.valueOf(totalReco));
         lblStatRecoResolues.setText(String.valueOf(recoResolues));
-    }    
-    
+    }
+
     @FXML
     public void ajouterRapport() {
         ouvrirFormulaireRapport(null);
@@ -359,9 +409,10 @@ public class ClientController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
         String safeTitre = selected.getTitre().replaceAll("[^a-zA-Z0-9]", "_");
         fileChooser.setInitialFileName("Rapport_Audit_" + safeTitre + ".pdf");
-        
+
         File file = fileChooser.showSaveDialog(rapportsTable.getScene().getWindow());
-        if (file == null) return;
+        if (file == null)
+            return;
 
         try {
             com.lowagie.text.Document document = new com.lowagie.text.Document(com.lowagie.text.PageSize.A4);
@@ -369,16 +420,20 @@ public class ClientController {
             document.open();
 
             // Polices
-            com.lowagie.text.Font titleFont = com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 18, com.lowagie.text.Font.BOLD, Color.DARK_GRAY);
-            com.lowagie.text.Font headerFont = com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 12, com.lowagie.text.Font.BOLD, Color.WHITE);
-            com.lowagie.text.Font normalFont = com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA, 11);
-            com.lowagie.text.Font boldFont = com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 11);
+            com.lowagie.text.Font titleFont = com.lowagie.text.FontFactory.getFont(
+                    com.lowagie.text.FontFactory.HELVETICA_BOLD, 18, com.lowagie.text.Font.BOLD, Color.DARK_GRAY);
+            com.lowagie.text.Font headerFont = com.lowagie.text.FontFactory
+                    .getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 12, com.lowagie.text.Font.BOLD, Color.WHITE);
+            com.lowagie.text.Font normalFont = com.lowagie.text.FontFactory
+                    .getFont(com.lowagie.text.FontFactory.HELVETICA, 11);
+            com.lowagie.text.Font boldFont = com.lowagie.text.FontFactory
+                    .getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 11);
 
             // Titre
             Paragraph pTitle = new Paragraph("RAPPORT D'AUDIT", titleFont);
             pTitle.setAlignment(Element.ALIGN_CENTER);
             document.add(pTitle);
-            document.add(new Paragraph(" ")); 
+            document.add(new Paragraph(" "));
 
             // Infos du rapport
             document.add(new Paragraph("Titre: " + selected.getTitre(), boldFont));
@@ -394,7 +449,8 @@ public class ClientController {
             document.add(new Paragraph(" "));
 
             // Recommandations
-            document.add(new Paragraph("RECOMMANDATIONS", com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 14)));
+            document.add(new Paragraph("RECOMMANDATIONS",
+                    com.lowagie.text.FontFactory.getFont(com.lowagie.text.FontFactory.HELVETICA_BOLD, 14)));
             document.add(new Paragraph(" "));
 
             PdfPTable table = new PdfPTable(3);
@@ -402,7 +458,7 @@ public class ClientController {
             table.setSpacingBefore(10f);
             table.setSpacingAfter(10f);
 
-            String[] headers = {"Description", "Priorité", "Résolue"};
+            String[] headers = { "Description", "Priorité", "Résolue" };
             for (String h : headers) {
                 com.lowagie.text.pdf.PdfPCell cell = new com.lowagie.text.pdf.PdfPCell(new Phrase(h, headerFont));
                 cell.setBackgroundColor(Color.GRAY);
