@@ -37,18 +37,28 @@ public class RapportService {
             System.out.println("🔍 Vérification des tables...");
             boolean needRepair = false;
             try {
-                st.executeQuery("SELECT 1 FROM rapport_audit LIMIT 1").close();
+                // Vérifier la table principale
+                st.executeQuery("SELECT 1 FROM audit_rapport LIMIT 1").close();
+                
+                // Vérifier si la nouvelle colonne existe
+                try {
+                    st.executeQuery("SELECT score_audit FROM audit_rapport LIMIT 1").close();
+                } catch (SQLException e) {
+                    System.out.println("⚠️ Colonne score_audit manquante, ajout en cours...");
+                    st.execute("ALTER TABLE audit_rapport ADD COLUMN score_audit TEXT");
+                }
             } catch (SQLException e) {
                 String msg = e.getMessage().toLowerCase();
-                if (msg.contains("doesn't exist in engine") || msg.contains("table") && msg.contains("doesn't exist")) {
+                if (msg.contains("doesn't exist") || msg.contains("not found")) {
                     needRepair = true;
                 }
             }
 
             if (needRepair) {
                 System.out.println("⚠️ Réparation de la base de données en cours...");
-                st.execute("DROP TABLE IF EXISTS recommandation");
-                st.execute("DROP TABLE IF EXISTS rapport_audit");
+                st.execute("DROP TABLE IF EXISTS audit_reco");
+                st.execute("DROP TABLE IF EXISTS audit_risque");
+                st.execute("DROP TABLE IF EXISTS audit_rapport");
                 System.out.println("✅ Tables supprimées pour réinitialisation.");
             }
 
@@ -61,7 +71,8 @@ public class RapportService {
                             statut VARCHAR(50) NOT NULL,
                             description TEXT,
                             date_creation DATE NOT NULL,
-                            date_mise_a_jour DATE NOT NULL
+                            date_mise_a_jour DATE NOT NULL,
+                            score_audit TEXT
                         ) ENGINE=InnoDB;
                     """);
 
@@ -103,8 +114,8 @@ public class RapportService {
         String sql = """
                     INSERT INTO audit_rapport
                     (id, titre, auditeur, entite_auditee, statut, description,
-                     date_creation, date_mise_a_jour)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                     date_creation, date_mise_a_jour, score_audit)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, r.getId());
@@ -115,6 +126,7 @@ public class RapportService {
             ps.setString(6, r.getDescription());
             ps.setDate(7, Date.valueOf(r.getDateCreation()));
             ps.setDate(8, Date.valueOf(r.getDateMiseAJour()));
+            ps.setString(9, r.getScoreAudit());
             ps.executeUpdate();
 
             // Sauvegarder les recommandations
@@ -132,7 +144,7 @@ public class RapportService {
         String sql = """
                     UPDATE audit_rapport SET
                         titre=?, auditeur=?, entite_auditee=?,
-                        statut=?, description=?, date_mise_a_jour=?
+                        statut=?, description=?, date_mise_a_jour=?, score_audit=?
                     WHERE id=?
                 """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -142,7 +154,8 @@ public class RapportService {
             ps.setString(4, r.getStatut().name());
             ps.setString(5, r.getDescription());
             ps.setDate(6, Date.valueOf(LocalDate.now()));
-            ps.setString(7, r.getId());
+            ps.setString(7, r.getScoreAudit());
+            ps.setString(8, r.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Erreur modification rapport : " + e.getMessage());
@@ -177,6 +190,7 @@ public class RapportService {
                 r.setStatut(StatutRapport.valueOf(rs.getString("statut")));
                 r.setDescription(rs.getString("description"));
                 r.setDateMiseAJour(rs.getDate("date_mise_a_jour").toLocalDate());
+                r.setScoreAudit(rs.getString("score_audit"));
                 r.setRecommandations(getRecommandations(r.getId()));
                 r.setRisques(getRisques(r.getId()));
                 liste.add(r);

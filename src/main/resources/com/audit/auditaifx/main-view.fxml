@@ -166,6 +166,8 @@
                               promptText="Auditeur"
                               styleClass="combo-filter" />
 
+                    <Button onAction="#resetFilters" styleClass="btn-reset" text="Initialiser" />
+
                     <Region HBox.hgrow="ALWAYS" />
 
                     <!-- New rapport button -->
@@ -213,7 +215,9 @@
                         <Button onAction="#modifierRapportSelectionne" styleClass="btn-edit" text="Modifier" />
                         <Button onAction="#supprimerRapportSelectionne" styleClass="btn-delete" text="Supprimer" />
                         <Button onAction="#genererRecoIA" fx:id="btnAnalyserIA" styleClass="btn-ai" text="✨ Recos IA" />
-                        <Button onAction="#genererRisquesIA" fx:id="btnDetecterRisques" styleClass="btn-risk" text="⚠ Calculer Risque" />
+                        <Button onAction="#calculerScoreAudit" fx:id="btnDetecterRisques" styleClass="btn-ai" text="📊 Score Rapport" />
+                        <Button onAction="#genererRisquesIA" styleClass="btn-risk" text="⚠️ Détecter Risques" />
+                        <Label fx:id="lblScoreBadge" styleClass="score-badge" visible="false" managed="false" />
                     </HBox>
 
                 <!-- INFO CARD: All report details vertical -->

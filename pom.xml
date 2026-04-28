@@ -103,6 +103,13 @@
             <artifactId>openpdf</artifactId>
             <version>1.3.30</version>
         </dependency>
+
+        <!-- GSON for JSON Parsing -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
     </dependencies>
 
     <build>

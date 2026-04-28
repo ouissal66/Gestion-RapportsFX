@@ -16,6 +16,7 @@ public class RapportAudit {
     private String description;
     private List<Recommandation> recommandations;
     private List<Risque> risques;
+    private String scoreAudit;
 
     public RapportAudit() {
         this.id = UUID.randomUUID().toString();
@@ -111,6 +112,14 @@ public class RapportAudit {
 
     public void setRisques(List<Risque> r) {
         this.risques = r;
+    }
+
+    public String getScoreAudit() {
+        return scoreAudit;
+    }
+
+    public void setScoreAudit(String scoreAudit) {
+        this.scoreAudit = scoreAudit;
     }
 
     public void ajouterRisque(Risque r) {

@@ -142,6 +142,47 @@
     -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.6), 10, 0, 0, 3);
 }
 
+.btn-reset {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-background-radius: 7;
+    -fx-padding: 5 12;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.btn-reset:hover {
+    -fx-background-color: #7f8c8d;
+}
+
+.score-badge {
+    -fx-padding: 5 12;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.score-badge-green { -fx-background-color: #2ecc71; }
+.score-badge-orange { -fx-background-color: #f1c40f; }
+.score-badge-red { -fx-background-color: #e74c3c; }
+
+.progress-dimension {
+    -fx-indeterminate-bar-length: 60;
+    -fx-indeterminate-bar-escape: true;
+    -fx-indeterminate-bar-flip: true;
+    -fx-indeterminate-bar-animation-delay: 0.75;
+}
+
+.progress-dimension .bar {
+    -fx-background-radius: 10;
+}
+
+.progress-dimension .track {
+    -fx-background-radius: 10;
+    -fx-background-color: #f1f3f5;
+}
+
 .btn-excel {
     -fx-background-color: #f39c12;
     -fx-text-fill: white;

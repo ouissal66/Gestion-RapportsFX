@@ -5,6 +5,7 @@ import com.audit.auditaifx.model.Recommandation;
 import com.audit.auditaifx.model.Risque;
 import com.audit.auditaifx.model.StatutRapport;
 import com.audit.auditaifx.service.AIService;
+
 import com.audit.auditaifx.service.RapportService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -183,10 +184,13 @@ public class MainController {
     private Button btnAnalyserIA;
     @FXML
     private Button btnDetecterRisques;
+    @FXML
+    private Label lblScoreBadge;
 
     // --- Services ---
     private RapportService service = new RapportService();
     private AIService aiService = new AIService();
+
     private RapportAudit rapportSelectionne = null;
 
     @FXML
@@ -313,6 +317,14 @@ public class MainController {
     }
 
     private void filtrerRapports(String query) {
+        appliquerFiltreEtPagination();
+    }
+
+    @FXML
+    public void resetFilters() {
+        txtSearchReports.clear();
+        comboFilterStatut.setValue("Tous");
+        comboFilterNom.setValue("Tous");
         appliquerFiltreEtPagination();
     }
 
@@ -511,6 +523,16 @@ public class MainController {
         // Description complète (Label wrappé, pas de scroll)
         String desc = rapport.getDescription();
         txtDescriptionRapport.setText(desc != null && !desc.isBlank() ? desc : "Aucune description disponible.");
+
+        // Afficher score si présent
+        if (rapport.getScoreAudit() != null && !rapport.getScoreAudit().isEmpty()) {
+            afficherBadgeScore(rapport.getScoreAudit());
+        } else {
+            btnDetecterRisques.setVisible(true);
+            btnDetecterRisques.setManaged(true);
+            lblScoreBadge.setVisible(false);
+            lblScoreBadge.setManaged(false);
+        }
 
         // Badge statut coloré
         lblStatutBadge.setText(rapport.getStatut().name().replace("_", " "));
@@ -981,6 +1003,77 @@ public class MainController {
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
+    }
+
+    @FXML
+    public void calculerScoreAudit() {
+        if (rapportSelectionne == null) return;
+
+        btnDetecterRisques.setDisable(true);
+        btnDetecterRisques.setText("⏳ Analyse...");
+
+        // Utilisation du service local (Mock) au lieu de Gemini
+        String json = aiService.calculerScoreAudit(rapportSelectionne);
+        
+        // Simuler un court délai pour l'effet "analyse"
+        javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(1));
+        pause.setOnFinished(e -> {
+            btnDetecterRisques.setDisable(false);
+            btnDetecterRisques.setText("📊 Score Rapport");
+
+            // Sauvegarder dans l'objet et la DB
+            rapportSelectionne.setScoreAudit(json);
+            service.modifier(rapportSelectionne);
+
+            // Afficher le badge et ouvrir le modal
+            afficherBadgeScore(json);
+            ouvrirModalScore(json);
+        });
+        pause.play();
+    }
+
+    private void afficherBadgeScore(String json) {
+        try {
+            com.google.gson.JsonObject data = com.google.gson.JsonParser.parseString(json).getAsJsonObject();
+            double score = data.get("global").getAsDouble();
+            
+            lblScoreBadge.setText("Score Rapport: " + String.format("%.1f", score) + "/10");
+            lblScoreBadge.getStyleClass().removeAll("score-badge-green", "score-badge-orange", "score-badge-red");
+            
+            if (score >= 7) lblScoreBadge.getStyleClass().add("score-badge-green");
+            else if (score >= 4) lblScoreBadge.getStyleClass().add("score-badge-orange");
+            else lblScoreBadge.getStyleClass().add("score-badge-red");
+
+            btnDetecterRisques.setVisible(false);
+            btnDetecterRisques.setManaged(false);
+            lblScoreBadge.setVisible(true);
+            lblScoreBadge.setManaged(true);
+            
+            // Permettre de cliquer sur le badge pour revoir les détails
+            lblScoreBadge.setOnMouseClicked(e -> ouvrirModalScore(json));
+            lblScoreBadge.setCursor(javafx.scene.Cursor.HAND);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void ouvrirModalScore(String json) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/audit/auditaifx/score-modal.fxml"));
+            javafx.scene.Parent root = loader.load();
+            
+            ScoreModalController controller = loader.getController();
+            controller.setScoreData(json);
+            
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Détails du Score Audit");
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

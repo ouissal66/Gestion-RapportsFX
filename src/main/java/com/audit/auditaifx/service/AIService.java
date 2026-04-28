@@ -59,31 +59,37 @@ public class AIService {
     }
 
     public Risque genererRisque(RapportAudit rapport) {
-        if (rapport == null)
-            return null;
+        if (rapport == null) return null;
 
-        String description = rapport.getDescription() != null ? rapport.getDescription().toLowerCase() : "";
+        String description = (rapport.getDescription() != null ? rapport.getDescription() : "").toLowerCase();
+        int nbRecos = (rapport.getRecommandations() != null ? rapport.getRecommandations().size() : 0);
+        java.time.LocalDate date = rapport.getDateCreation();
 
-        String risqueDesc;
+        String risqueDesc = "Risque identifié suite à l'analyse des recommandations.";
         String niveau = "Moyen";
-        String impact = "Impact modéré sur les opérations.";
+        String impact = "Impact sur la continuité de service.";
 
-        if (description.contains("sécurité") || description.contains("security")) {
-            risqueDesc = "Risque d'accès non autorisé ou de fuite de données.";
+        // Logique basée sur les recommandations
+        if (nbRecos > 8) {
+            risqueDesc = "Risque de surcharge opérationnelle dû au volume élevé de recommandations.";
+            niveau = "Élevé";
+            impact = "Retard dans la mise en œuvre des contrôles critiques.";
+        } 
+        // Logique basée sur la date (plus de 6 mois)
+        else if (date != null && date.isBefore(java.time.LocalDate.now().minusMonths(6))) {
+            risqueDesc = "Risque d'obsolescence des données d'audit (rapport de plus de 6 mois).";
+            niveau = "Moyen";
+            impact = "Décisions basées sur des informations potentiellement périmées.";
+        }
+        // Logique basée sur le texte
+        else if (description.contains("sécurité") || description.contains("mfa") || description.contains("accès")) {
+            risqueDesc = "Risque de compromission des identités et accès non autorisés.";
             niveau = "Critique";
-            impact = "Perte de confidentialité et non-conformité RGPD.";
-        } else if (description.contains("réseau") || description.contains("network")) {
-            risqueDesc = "Vulnérabilité aux attaques par déni de service (DDoS).";
+            impact = "Exposition des données sensibles et violation de conformité.";
+        } else if (description.contains("sauvegarde") || description.contains("backup")) {
+            risqueDesc = "Risque de perte de données par manque de résilience.";
             niveau = "Élevé";
-            impact = "Indisponibilité des services critiques.";
-        } else if (description.contains("données") || description.contains("data")) {
-            risqueDesc = "Absence de redondance pour les bases de données critiques.";
-            niveau = "Élevé";
-            impact = "Perte irréversible de données en cas de panne matérielle.";
-        } else {
-            risqueDesc = "Manque de documentation à jour sur les procédures d'urgence.";
-            niveau = "Faible";
-            impact = "Ralentissement de la reprise d'activité après sinistre.";
+            impact = "Interruption prolongée de l'activité en cas d'incident majeur.";
         }
 
         return new Risque("[IA] " + risqueDesc, niveau, impact);
@@ -139,6 +145,31 @@ public class AIService {
         }
 
         return best != null ? new PrioriteResult(best, bestScore, bestRaison) : null;
+    }
+
+    public String calculerScoreAudit(RapportAudit rapport) {
+        if (rapport == null) return "{\"error\": \"Rapport nul\"}";
+
+        String description = (rapport.getDescription() != null ? rapport.getDescription() : "").toLowerCase();
+        int recos = (rapport.getRecommandations() != null ? rapport.getRecommandations().size() : 0);
+        int risques = (rapport.getRisques() != null ? rapport.getRisques().size() : 0);
+
+        // Calcul simulé
+        double c = 7.0 + (description.length() > 200 ? 2.0 : 0.5); // Complétude
+        double cf = 6.0 + (recos > 5 ? 3.0 : 1.0);                  // Conformité
+        double d = 5.0 + (description.contains("procédure") ? 4.0 : 1.0); // Documentation
+        double s = 4.0 + (recos > 0 && rapport.getRecommandations().get(0).isResolue() ? 5.0 : 1.0); // Suivi
+        double r = 8.0 - (risques * 0.5);                           // Réactivité
+
+        // Limiter à 10
+        c = Math.min(10, c); cf = Math.min(10, cf); d = Math.min(10, d); s = Math.min(10, s); r = Math.min(10, r);
+
+        double global = (c + cf + d + s + r) / 5.0;
+        String verdict = (global >= 7 ? "Performance satisfaisante." : (global >= 5 ? "Améliorations nécessaires." : "Audit critique."));
+
+        return String.format(java.util.Locale.US,
+            "{\"completude\": %.1f, \"conformite\": %.1f, \"documentation\": %.1f, \"suivi\": %.1f, \"reactivite\": %.1f, \"global\": %.1f, \"verdict\": \"%s\"}",
+            c, cf, d, s, r, global, verdict);
     }
 
     /** Résultat de l'analyse de priorité IA */

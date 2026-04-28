@@ -13,6 +13,7 @@ module com.audit.auditaifx {
     requires org.apache.xmlbeans;
     requires org.apache.logging.log4j;
     requires com.github.librepdf.openpdf;
+    requires com.google.gson;
 
     // Ouvrir les packages à JavaFX pour la réflexion
     opens com.audit.auditaifx to javafx.fxml;
